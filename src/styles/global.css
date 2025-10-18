@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+html {
+  text-autospace: normal;
+}
+
 body {
   font-family:
     system-ui,
