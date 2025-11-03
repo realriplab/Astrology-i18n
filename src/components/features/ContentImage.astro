@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import OptimizedPicture from './OptimizedPicture.astro';
 
 interface Props {
   src: string;
@@ -37,16 +38,19 @@ const cls = [props.class, 'h-auto max-w-full', rounded ? 'rounded-lg' : '']
 
 {
   isRemote ? (
-    // For remote URLs, avoid astro:assets fetching to infer dimensions;
-    // render a standard img to prevent build-time network errors.
-    <img
+    <OptimizedPicture
       src={props.src}
       alt={props.alt || ''}
       class={cls}
+      priority={isPriority}
+      sizes={sizes}
       loading={loading}
       decoding={decoding}
       fetchpriority={fetchpriority}
-      sizes={sizes}
+      rounded={rounded}
+      inferSize={!hasSize}
+      {...(typeof props.width === 'number' ? { width: props.width } : {})}
+      {...(typeof props.height === 'number' ? { height: props.height } : {})}
     />
   ) : hasSize ? (
     <Image
