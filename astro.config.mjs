@@ -1,3 +1,4 @@
+import astroExpressiveCode from 'astro-expressive-code';
 import mdx from '@astrojs/mdx';
 import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
@@ -36,6 +37,10 @@ export default defineConfig({
   },
 
   integrations: [
+    astroExpressiveCode({
+      themes: ['github-dark', 'github-light'],
+      themeCssSelector: (theme) => (theme.type === 'dark' ? '.dark' : ''),
+    }),
     sitemap({
       i18n: {
         defaultLocale: 'zh',
