@@ -31,8 +31,8 @@ function iconFor(label: string, url: string): string {
   if (k === 'x' || k === 'twitter') return 'tabler:brand-x';
   if (k === 'github') return 'mdi:github';
   if (k === 'rss' || url.endsWith('.xml')) return 'mdi:rss';
-  if (k === 'website' || /^https?:\/\/.*/.test(url)) return 'mdi:link-variant';
-  return 'mdi:link-variant';
+  if (k === 'website' || /^https?:\/\/.*/.test(url)) return 'mdi:web';
+  return 'mdi:web';
 }
 function githubUsernameFromSocials(
   list: Array<{ label: string; url: string }>,
@@ -98,13 +98,13 @@ const years = [currentYear, currentYear - 1, currentYear - 2];
                     href={s.url}
                     target={s.url.startsWith('http') ? '_blank' : undefined}
                     rel={s.url.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    class="group inline-flex items-center gap-2 rounded-full bg-neutral-100 px-5 py-2.5 text-sm font-medium text-neutral-700 transition-all duration-200 hover:scale-105 hover:bg-neutral-900 hover:text-white hover:shadow-lg dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-white dark:hover:text-neutral-900"
+                    class="group inline-flex items-center justify-center rounded-full bg-neutral-100 p-3 text-neutral-700 transition-all duration-200 hover:scale-110 hover:bg-neutral-900 hover:text-white hover:shadow-lg dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-white dark:hover:text-neutral-900"
+                    aria-label={s.label}
                   >
                     <Icon
                       name={iconFor(s.label, s.url)}
                       class="h-5 w-5 transition-transform duration-200 group-hover:scale-110"
                     />
-                    <span>{s.label}</span>
                   </a>
                 ))}
               </div>
