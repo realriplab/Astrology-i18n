@@ -77,7 +77,6 @@ class ImageFadeIn {
         this.observeTextElements();
         this.observeCustomElements();
         this.observeDOMChanges();
-        this.setupViewTransitions();
     }
 
     private debounce(func: () => void, wait: number): () => void {
@@ -405,20 +404,12 @@ class ImageFadeIn {
         });
     }
 
-    private setupViewTransitions(): void {
-        document.addEventListener('astro:page-load', () => {
-            this.imageCount = 0;
-            this.observeCardContainers();
-            this.observeImages();
-            this.observeTextElements();
-            this.observeCustomElements();
-        });
-
-        document.addEventListener('astro:before-preparation', () => {
-            if (this.observer) {
-                this.observer.disconnect();
-            }
-        });
+    public reinit(): void {
+        this.imageCount = 0;
+        this.observeCardContainers();
+        this.observeImages();
+        this.observeTextElements();
+        this.observeCustomElements();
     }
 
     public destroy(): void {
@@ -434,22 +425,23 @@ class ImageFadeIn {
 }
 
 if (typeof window !== 'undefined') {
-    const initFadeIn = () => {
-        new ImageFadeIn({
-            threshold: 0.1,
-            rootMargin: '0px 0px -80px 0px',
-            duration: 800,
-            delay: 0,
-            stagger: 50,
-            respectMotionPreference: true,
-        });
-    };
+    import('@/utils/page-init').then(({ registerPageInit }) => {
+        registerPageInit('imageFadeIn', () => {
+            const fadeInInstance = new ImageFadeIn({
+                threshold: 0.1,
+                rootMargin: '0px 0px -80px 0px',
+                duration: 800,
+                delay: 0,
+                stagger: 50,
+                respectMotionPreference: true,
+            });
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initFadeIn);
-    } else {
-        initFadeIn();
-    }
+            // 返回清理函数
+            return () => {
+                fadeInInstance.destroy();
+            };
+        });
+    });
 }
 
 export default ImageFadeIn;
