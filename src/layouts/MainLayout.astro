@@ -6,8 +6,6 @@ import GTMBody from '@/analytics/GTMBody.astro';
 import type { Lang } from '@/utils/i18n';
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
-import VercelSpeedInsights from '@vercel/speed-insights/astro';
-import VercelAnalytics from '@vercel/analytics/astro';
 
 interface Props {
   lang?: Lang;
@@ -40,8 +38,6 @@ const resolvedLang = ((Astro.currentLocale as Lang | undefined) ??
       <Footer lang={resolvedLang} />
       <slot name="after" />
     </div>
-    <VercelSpeedInsights />
-    <VercelAnalytics />
     <GTMBody />
   </body>
 </html>
