@@ -28,11 +28,11 @@ const avatar = entry?.data.avatar || (fallbackAvatar as any);
 
 function iconFor(label: string, url: string): string {
   const k = String(label || '').toLowerCase();
-  if (k === 'x' || k === 'twitter') return 'tabler:brand-x';
-  if (k === 'github') return 'mdi:github';
-  if (k === 'rss' || url.endsWith('.xml')) return 'mdi:rss';
-  if (k === 'website' || /^https?:\/\/.*/.test(url)) return 'mdi:web';
-  return 'mdi:web';
+  if (k === 'x' || k === 'twitter') return 'lucide:twitter';
+  if (k === 'github') return 'lucide:github';
+  if (k === 'rss' || url.endsWith('.xml')) return 'lucide:rss';
+  if (k === 'website' || /^https?:\/\/.*/.test(url)) return 'lucide:globe';
+  return 'lucide:globe';
 }
 function githubUsernameFromSocials(
   list: Array<{ label: string; url: string }>,

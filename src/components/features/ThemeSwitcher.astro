@@ -14,9 +14,9 @@ const resolvedLang = ((Astro.currentLocale as Lang | undefined) ??
   'zh') as Lang;
 
 const THEME_OPTIONS = [
-  { value: 'light', label: t(resolvedLang, 'theme.light'), icon: 'mdi:white-balance-sunny' },
-  { value: 'dark', label: t(resolvedLang, 'theme.dark'), icon: 'mdi:moon-waning-crescent' },
-  { value: 'system', label: t(resolvedLang, 'theme.system'), icon: 'tabler:brightness-filled' },
+  { value: 'light', label: t(resolvedLang, 'theme.light'), icon: 'lucide:sun' },
+  { value: 'dark', label: t(resolvedLang, 'theme.dark'), icon: 'lucide:moon' },
+  { value: 'system', label: t(resolvedLang, 'theme.system'), icon: 'lucide:monitor' },
 ];
 ---
 
@@ -26,8 +26,8 @@ const THEME_OPTIONS = [
     aria-label={t(resolvedLang, 'theme.toggle')}
   >
     <span data-theme-icon>
-      <Icon name="mdi:white-balance-sunny" class="dark:hidden" />
-      <Icon name="mdi:moon-waning-crescent" class="hidden dark:inline" />
+      <Icon name="lucide:sun" class="dark:hidden" />
+      <Icon name="lucide:moon" class="hidden dark:inline" />
     </span>
     <span class="sr-only">{t(resolvedLang, 'theme.toggle')}</span>
   </summary>

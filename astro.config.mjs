@@ -67,8 +67,7 @@ export default defineConfig({
     }),
     icon({
       include: {
-        tabler: ['*'],
-        mdi: ['*'],
+        lucide: ['*'],
       },
     }),
   ],
