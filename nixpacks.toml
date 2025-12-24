@@ -17,5 +17,5 @@ cmds = [
 ]
 
 [start]
-# 构建成功后启动状态监控面板
+# 构建成功启动状态监控面板
 cmd = "node deploy-wrapper.cjs"
