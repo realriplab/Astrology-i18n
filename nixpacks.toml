@@ -1,14 +1,21 @@
 [phases.setup]
-# 使用 nodejs_23 以满足 Vite 7.2.4 对 >22.12.0 的要求
+# 使用 nodejs_23 满足 Astro 5 和 Vite 7 的高版本要求
 pkgs = ["nodejs_23", "npm"]
 
 [phases.install]
-# 正常安装依赖
+# 安装项目依赖及 EdgeOne 全局工具
 cmds = ["npm ci", "npm install -g edgeone"]
 
 [phases.build]
-# 执行构建
-cmds = ["npm run build"]
+# 1. 执行 Astro 构建生成 dist 目录
+# 2. 直接在构建阶段执行上传指令
+# 注意：这里使用了环境变量 $EDGEONE_PROJECT_NAME 和 $EDGEONE_API_TOKEN
+cmds = [
+    "npm run build",
+    "edgeone pages deploy ./dist -n $EDGEONE_PROJECT_NAME -t $EDGEONE_API_TOKEN --force"
+]
 
 [start]
+# 构建完成后，启动一个超轻量级的监控面板（即你原本的 cjs 脚本）
+# 此时 deploy-wrapper.cjs 只需要负责显示“部署已完成”状态即可
 cmd = "node deploy-wrapper.cjs"

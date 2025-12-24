@@ -1,103 +1,65 @@
 /**
  * deploy-wrapper.cjs
- * 纯净版：请直接全选覆盖，不要保留任何 字符
+ * 状态监控版：上传逻辑已移至构建阶段。
+ * 此脚本仅用于保持容器运行、通过 Dokploy 健康检查并展示部署状态。
  */
-const { exec } = require('child_process');
 const http = require('http');
 
 const PORT = process.env.PORT || 3000;
-const TOKEN = process.env.EDGEONE_API_TOKEN;
-const PROJECT = process.env.EDGEONE_PROJECT_NAME;
-const DIST_DIR = './dist';
+const PROJECT = process.env.EDGEONE_PROJECT_NAME || 'Unknown Project';
 
+// 部署状态（因为能运行到这里，说明构建阶段的上传必然已成功）
 let deployState = {
-    status: 'PENDING',
-    startTime: new Date(),
-    logs: [],
-    exitCode: null
+    status: 'SUCCESS',
+    completeTime: new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }),
+    message: 'Deployment to Tencent Cloud EdgeOne was completed during the Build Phase.'
 };
 
-function log(message, type = 'info') {
+function log(message) {
     const timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];
-    const entry = `[${timestamp}][${type.toUpperCase()}] ${message}`;
-    console.log(entry);
-    deployState.logs.push(entry);
-}
-
-function runDeployment() {
-    if (!TOKEN || !PROJECT) {
-        deployState.status = 'FAILED';
-        log('CRITICAL ERROR: Missing EDGEONE_API_TOKEN or EDGEONE_PROJECT_NAME env vars.', 'error');
-        return;
-    }
-
-    deployState.status = 'RUNNING';
-    log(`Starting deployment for project: ${PROJECT}`);
-
-    // 执行上传指令
-    const command = `edgeone pages deploy ${DIST_DIR} -n "${PROJECT}" -t "${TOKEN}" --force`;
-
-    log('Executing EdgeOne CLI command...');
-
-    const child = exec(command, {
-        env: { ...process.env },
-        maxBuffer: 1024 * 1024 * 10
-    });
-
-    child.stdout.on('data', (data) => {
-        data.toString().split('\n').forEach(line => {
-            if (line.trim()) log(line.trim(), 'stdout');
-        });
-    });
-
-    child.stderr.on('data', (data) => {
-        data.toString().split('\n').forEach(line => {
-            if (line.trim()) log(line.trim(), 'stderr');
-        });
-    });
-
-    child.on('close', (code) => {
-        deployState.exitCode = code;
-        if (code === 0) {
-            deployState.status = 'SUCCESS';
-            log('Deployment completed successfully!');
-
-            const fs = require('fs');
-            if (fs.existsSync(DIST_DIR)) {
-                log('Cleaning up dist directory to save space...');
-                fs.rmSync(DIST_DIR, { recursive: true, force: true });
-            }
-        } else {
-            deployState.status = 'FAILED';
-            log(`Deployment failed with exit code ${code}.`, 'error');
-        }
-    });
+    console.log(`[${timestamp}][INFO] ${message}`);
 }
 
 const server = http.createServer((req, res) => {
+    // 1. Dokploy 健康检查接口
     if (req.url === '/health') {
         res.writeHead(200);
         res.end('OK');
         return;
     }
 
+    // 2. 状态看板页面
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
     res.end(`
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Deployment: ${PROJECT}</title>
+            <title>Status: ${PROJECT}</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
             <style>
-                body { font-family: monospace; background: #121212; color: #e0e0e0; padding: 20px; }
-                .status { padding: 8px 15px; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 20px; }
-                .SUCCESS { background: #2e7d32; } .FAILED { background: #c62828; } .RUNNING { background: #1565c0; }
-                .log-box { background: #000; padding: 15px; border: 1px solid #333; border-radius: 4px; white-space: pre-wrap; }
+                body { font-family: -apple-system, system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; padding: 40px; line-height: 1.6; }
+                .card { max-width: 600px; margin: 0 auto; background: #161616; border: 1px solid #333; border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+                .status-badge { padding: 6px 12px; border-radius: 6px; font-weight: bold; background: #2e7d32; color: #fff; display: inline-block; margin-bottom: 20px; }
+                h1 { margin: 0 0 10px 0; font-size: 24px; color: #fff; }
+                .meta { color: #888; font-size: 14px; margin-bottom: 20px; }
+                .log-box { background: #000; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 13px; color: #4caf50; border-left: 4px solid #2e7d32; }
+                hr { border: 0; border-top: 1px solid #333; margin: 20px 0; }
             </style>
         </head>
         <body>
-            <h1>EdgeOne Pages Deployment Dashboard</h1>
-            <div class="status ${deployState.status}">STATUS: ${deployState.status}</div>
-            <div class="log-box">${deployState.logs.join('\n') || 'Waiting for logs...'}</div>
+            <div class="card">
+                <div class="status-badge">ONLINE</div>
+                <h1>${PROJECT}</h1>
+                <div class="meta">EdgeOne Pages Deployment Status</div>
+                <hr>
+                <p><strong>Status:</strong> ${deployState.status}</p>
+                <p><strong>Last Sync:</strong> ${deployState.completeTime}</p>
+                <div class="log-box">
+                    &gt; ${deployState.message}<br>
+                    &gt; Assets are hosted on EdgeOne Edge Nodes.<br>
+                    &gt; Dokploy container is healthy.
+                </div>
+            </div>
         </body>
         </html>
     `);
@@ -105,5 +67,6 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
     log(`Monitor server running on port ${PORT}`);
-    runDeployment();
+    log(`Project: ${PROJECT}`);
+    log(`Status: Deployment confirmed via Nixpacks Build Phase.`);
 });
