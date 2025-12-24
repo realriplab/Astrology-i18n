@@ -24,7 +24,7 @@ WORKDIR /app
 # 只安装运行上传脚本所需的最小工具
 RUN npm install -g edgeone && apk add --no-cache curl
 
-# 从构建阶段只拷贝必要产物
+# 从构建阶段拷贝必要产物
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/deploy-wrapper.cjs ./deploy-wrapper.cjs
 
