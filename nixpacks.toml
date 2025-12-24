@@ -1,7 +1,7 @@
 [phases.setup]
 # 1. 修正语法：使用 pkgs 而非 nixPkgs
 # 2. 强制使用 Node 23 满足 Vite 7 和 Astro 5 要求
-pkgs = ["nodejs_22"]
+nixPkgs = ["nodejs_22"]
 
 [phases.install]
 # 安装依赖（包含 edgeone）
