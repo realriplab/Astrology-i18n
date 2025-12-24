@@ -1,18 +1,32 @@
 [phases.setup]
-# 强制 Node 23 以适配最新的集成环境
-nixPkgs = ["nodejs_23"]
+# 1. 修正语法：使用 pkgs 而非 nixPkgs
+# 2. 强制使用 Node 23 满足 Vite 7 和 Astro 5 要求
+pkgs = ["nodejs_22"]
 
 [phases.install]
-# 直接安装依赖，edgeone 已在 package.json 的 devDependencies 中
+# 安装依赖（包含 edgeone）
 cmds = ["npm ci"]
 
 [phases.build]
-# 1. 编译项目
-# 2. 拷贝 package.json（EdgeOne 规范）
-# 3. 增量部署：去掉了 --force，CLI 会自动进行文件哈希比对
+# 核心逻辑：增加路径诊断 -> 编译 -> 拷贝配置 -> 增量部署
 cmds = [
+    # --- 诊断步骤：如果构建报错，请看这部分的日志输出 ---
+    "echo '--- 检查目录结构 ---'",
+    "ls -F src/", 
+    "echo '------------------'",
+    
+    # --- 修复步骤：防止 Git 记录的大小写与 Linux 环境冲突 ---
+    # 如果存在 src/Pages，强制重命名为 src/pages
+    "if [ -d 'src/Pages' ]; then mv src/Pages src/pages; fi",
+
+    # --- 执行构建 ---
     "npm run build",
+    
+    # --- 准备上传 ---
     "cp package.json ./dist/",
+    
+    # --- 增量同步至 EdgeOne ---
+    # 删除了 --force，开启 Hash 比对增量模式
     "npx edgeone pages deploy ./dist -n $EDGEONE_PROJECT_NAME -t $EDGEONE_API_TOKEN"
 ]
 
