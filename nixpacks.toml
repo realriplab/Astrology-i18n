@@ -1,6 +1,6 @@
 [phases.setup]
 # 强制 Node 23 以适配最新的集成环境
-nixPkgs = ["nodejs_22"]
+nixPkgs = ["nodejs_23"]
 
 [phases.install]
 # 直接 npm ci 即可，因为 edgeone 已经在 devDependencies 中
