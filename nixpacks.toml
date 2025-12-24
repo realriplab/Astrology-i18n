@@ -1,0 +1,20 @@
+# nixpacks.toml
+[phases.setup]
+# 指定 Node.js 版本
+nixPkgs = ["nodejs-20"]
+
+[phases.install]
+# 安装依赖，并额外安装 edgeone 全局工具
+cmds = ["npm ci", "npm install -g edgeone"]
+# 关键优化：显式缓存 node_modules 和 npm 缓存
+cacheDirectories = ["node_modules", "/root/.npm"]
+
+[phases.build]
+# 执行构建
+cmds = ["npm run build"]
+# 关键优化：缓存 Astro 的编译缓存目录
+cacheDirectories = [".astro_cache"]
+
+[start]
+# 启动部署脚本
+cmd = "node deploy-wrapper.cjs"

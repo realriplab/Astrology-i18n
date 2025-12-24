@@ -61,6 +61,12 @@ function runDeployment() {
         if (code === 0) {
             deployState.status = 'SUCCESS';
             log('Deployment completed successfully!');
+
+            const fs = require('fs');
+            if (fs.existsSync(DIST_DIR)) {
+                log('Cleaning up dist directory to save space...');
+                fs.rmSync(DIST_DIR, { recursive: true, force: true });
+            }
         } else {
             deployState.status = 'FAILED';
             log(`Deployment failed with exit code ${code}.`, 'error');
