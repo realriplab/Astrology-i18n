@@ -8,7 +8,7 @@ tags:
   - "策略"
 pubDate: 2024-12-24
 author: "Astro"
-heroImage: "https://images.unsplash.com/photo-1477346611705-65d1883cee1e"
+heroImage: "https://images.unsplash.com/photo-1611162617474-5b21e879e113"
 heroImageAlt: "iNote-创业公司股权设置那些坑"
 draft: false
 featured: false

@@ -6,7 +6,7 @@ tags:
   - "策略"
 pubDate: 2016-06-05
 author: "Astro"
-heroImage: "https://images.unsplash.com/photo-1506794778225-cbf6c8df4c5c"
+heroImage: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d"
 heroImageAlt: "iNote-个人主义与快速消费"
 draft: false
 featured: false

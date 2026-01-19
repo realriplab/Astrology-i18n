@@ -6,7 +6,7 @@ tags:
   - "沉思"
 pubDate: 2024-12-23
 author: "Astro"
-heroImage: "https://images.unsplash.com/photo-1506794778225-cbf6c8df4c5c"
+heroImage: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d"
 heroImageAlt: "iNote-多思少动，边看边学"
 draft: false
 featured: false

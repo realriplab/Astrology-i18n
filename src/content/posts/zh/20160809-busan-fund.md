@@ -6,7 +6,7 @@ tags:
   - "配置"
 pubDate: 2023-09-28
 author: "Astro"
-heroImage: "https://images.unsplash.com/photo-1506794778225-cbf6c8df4c5c"
+heroImage: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3"
 heroImageAlt: "iNote-釜山行，基金考试与大佬的离场"
 draft: false
 featured: false

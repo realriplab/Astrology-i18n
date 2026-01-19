@@ -6,7 +6,7 @@ tags:
   - "创新"
 pubDate: 2024-06-28
 author: "Astro"
-heroImage: "https://images.unsplash.com/photo-1477346611705-65d1883cee1e"
+heroImage: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae"
 heroImageAlt: "iNote-建设智能化育苗工厂势在必行"
 draft: false
 featured: false

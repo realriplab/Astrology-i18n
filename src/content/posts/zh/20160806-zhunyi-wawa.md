@@ -6,7 +6,7 @@ tags:
   - "行走"
 pubDate: 2023-07-06
 author: "Astro"
-heroImage: "https://images.unsplash.com/photo-1477346611705-65d1883cee1e"
+heroImage: "https://images.unsplash.com/photo-1500382017468-9049fed747ef"
 heroImageAlt: "iNote-遵义，手撕鬼子与手撕丝娃娃"
 draft: false
 featured: false

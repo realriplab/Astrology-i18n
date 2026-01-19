@@ -6,7 +6,7 @@ tags:
   - "创新"
 pubDate: 2024-11-22
 author: "Astro"
-heroImage: "https://images.unsplash.com/photo-1477346611705-65d1883cee1e"
+heroImage: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449"
 heroImageAlt: "iNote-硅肥行业与市场"
 draft: false
 featured: false

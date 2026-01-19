@@ -6,7 +6,7 @@ tags:
   - "管理"
 pubDate: 2024-12-14
 author: "Astro"
-heroImage: "https://images.unsplash.com/photo-1477346611705-65d1883cee1e"
+heroImage: "https://images.unsplash.com/photo-1559827291-72ee739d0d9a"
 heroImageAlt: "iNote-为什么实施乡村振兴战略"
 draft: false
 featured: false

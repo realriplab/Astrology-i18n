@@ -7,7 +7,7 @@ tags:
   - "创新"
 pubDate: 2024-09-11
 author: "Astro"
-heroImage: "https://images.unsplash.com/photo-1477346611705-65d1883cee1e"
+heroImage: "https://images.unsplash.com/photo-1508614589041-895b88991e3e"
 heroImageAlt: "iNote-互联网+现代农业星辰大海"
 draft: false
 featured: false

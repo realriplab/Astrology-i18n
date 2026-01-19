@@ -6,7 +6,7 @@ tags:
   - "创新"
 pubDate: 2024-10-25
 author: "Astro"
-heroImage: "https://images.unsplash.com/photo-1477346611705-65d1883cee1e"
+heroImage: "https://images.unsplash.com/photo-1519996529931-28324d5a630e"
 heroImageAlt: "iNote-果蔬保鲜剂行业与市场"
 draft: false
 featured: false
