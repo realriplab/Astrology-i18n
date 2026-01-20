@@ -1,0 +1,45 @@
+---
+title: "Judul Placeholder"
+description: "Ini adalah deskripsi placeholder singkat dari konten artikel."
+category: "Investasi"
+tags:
+  - "Strategi"
+pubDate: 2024-11-22
+author: "Astro"
+heroImage: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449"
+heroImageAlt: "Deskripsi gambar placeholder"
+draft: false
+featured: false
+locales: id
+---
+
+## Pendahuluan
+
+Ini adalah artikel placeholder yang mendemonstrasikan berbagai elemen Markdown.
+
+![Gambar Placeholder](https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800)
+
+## Konten Utama
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Berikut adalah contoh **teks tebal** dan *teks miring*.
+
+### Subbagian
+
+Daftar item:
+
+- Item pertama
+- Item kedua
+- Item ketiga
+
+### Contoh Kode
+
+```javascript
+function contoh() {
+  console.log("Halo Dunia!");
+  return true;
+}
+```
+
+## Kesimpulan
+
+Ini adalah paragraf penutup dari artikel placeholder.
