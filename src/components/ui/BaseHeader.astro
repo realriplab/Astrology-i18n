@@ -96,12 +96,25 @@ const languageAlternates = SUPPORTED_LANGS.map((l) => ({
 }));
 const xDefaultHref = new URL(toAbsolute(DEFAULT_LANG, Astro.url.pathname), Astro.site!).href;
 
+const rawCanonical = canonical || new URL(Astro.url.pathname, Astro.site!).href;
+const finalCanonical = (() => {
+  try {
+    const u = new URL(rawCanonical);
+    if (!u.pathname.endsWith('/') && !u.pathname.split('/').pop()?.includes('.')) {
+      u.pathname += '/';
+    }
+    return u.href;
+  } catch {
+    return rawCanonical;
+  }
+})();
+
 const seoProps: any = {
   title: title ?? undefined,
   titleTemplate,
   titleDefault,
   description: metaDescription,
-  canonical: canonical ?? undefined,
+  canonical: finalCanonical,
   noindex: !!noindex,
   languageAlternates: [...languageAlternates, { hrefLang: 'x-default', href: xDefaultHref }],
   openGraph: {
@@ -179,7 +192,7 @@ const seoProps: any = {
 
 {
   (() => {
-    const canonicalURL = canonical || Astro.url.href;
+    const canonicalURL = finalCanonical;
     const pageTitle = title ? titleTemplate.replace('%s', title) : siteName;
     const ld: any = {
       '@context': 'https://schema.org',
