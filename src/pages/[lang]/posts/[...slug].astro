@@ -5,7 +5,6 @@ import RelatedList from '@/widgets/RelatedList.astro';
 import PostLayout from '@/layouts/PostLayout.astro';
 import Prose from '@/features/Prose.astro';
 import type { Lang } from '@/utils/i18n';
-import Comment from '@/widgets/Comment.astro';
 import { DEFAULT_LANG, SUPPORTED_LANGS, toAbsolute } from '@/utils/i18n';
 
 export async function getStaticPaths() {
@@ -71,10 +70,5 @@ const postLayoutProps = {
 
 <PostLayout {...postLayoutProps}>
   <Content components={{ img: ContentImage }} />
-  <Prose lang={lang} slot="after">
-    <div class="not-prose">
-      <Comment lang={lang} path={Astro.url.pathname} />
-    </div>
-  </Prose>
   <RelatedList slot="after" lang={lang} category={entry.data.category} excludeId={entry.id} />
 </PostLayout>
