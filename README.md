@@ -2,20 +2,26 @@
 
 # Astrology i18n — Multilingual Astro Blog Theme
 
-[![Astro](https://img.shields.io/badge/Astro-5-BC52EE?logo=astro)](https://astro.build)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Node](https://img.shields.io/badge/Node-%E2%89%A5%2020-339933?logo=node.js)](https://nodejs.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Astro](https://img.shields.io/badge/Astro-5-BC52EE?logo=astro)](https://astro.build) [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com) [![Node](https://img.shields.io/badge/Node-%E2%89%A5%2020-339933?logo=node.js)](https://nodejs.org) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A professional, multilingual photo-and-prose theme built with **Astro 5** and **Tailwind CSS 4**. Start your global storytelling journey with per-locale routes, centralized dictionaries, SEO optimization, and a modern, responsive design.
 
-<div align="center">
-  <p>
-    <a href="https://pagespeed.web.dev/analysis/https-astrology-yo7bu6q1-edgeone-app/nij513nbyr?form_factor=mobile">
-      <img src="public/astrology-i18n-lighthouse-score.svg" alt="Lighthouse Score" width="300" />
-    </a>
-  </p>
+<a href="https://pagespeed.web.dev/analysis/https-astrology-yo7bu6q1-edgeone-app/nij513nbyr?form_factor=mobile">
+  <img src="public/astrology-i18n-lighthouse-score.svg" alt="Lighthouse Score" width="300" />
+</a>
+
 </div>
+
+## Table of Contents
+
+- [Highlights](#-highlights)
+- [Getting Started](#-getting-started)
+- [Project Structure](#-project-structure)
+- [Internationalization (i18n)](#-internationalization-i18n)
+- [Content Authoring](#-content-authoring)
+- [Configuration & Integrations](#-configuration--integrations)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ## ⚡️ Highlights
 
@@ -121,7 +127,7 @@ locales: "en" # helper for filtering
 ---
 ```
 
-## 🛠Configuration & Integrations
+## 🛠 Configuration & Integrations
 
 ### GitHub Activity Calendar
 

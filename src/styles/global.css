@@ -242,7 +242,6 @@ html {
    ======================================== */
 
 @media (prefers-reduced-motion: reduce) {
-
   .blur-placeholder,
   .lazy-fade-in {
     animation: none;
