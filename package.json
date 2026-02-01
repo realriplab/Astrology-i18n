@@ -10,6 +10,7 @@
     ]
   },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
