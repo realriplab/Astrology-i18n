@@ -1,57 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":automergeAll",
-    ":automergeBranch",
-    ":dependencyDashboard",
-    ":semanticCommits",
-    ":semanticCommitTypeAll(chore)",
-    "schedule:earlyMondays"
-  ],
-  "timezone": "Asia/Shanghai",
-  "labels": ["dependencies"],
-  "packageRules": [
-    {
-      "groupName": "Astro ecosystem",
-      "matchPackageNames": ["astro{/,}**", "@astrojs/{/,}**"],
-      "automerge": true
-    },
-    {
-      "groupName": "Tailwind CSS",
-      "matchPackageNames": ["tailwindcss", "@tailwindcss/**"],
-      "automerge": true
-    },
-    {
-      "groupName": "TypeScript types",
-      "matchPackageNames": ["@types/{/,}**"],
-      "automerge": true
-    },
-    {
-      "matchUpdateTypes": ["patch", "minor"],
-      "automerge": true,
-      "automergeType": "branch",
-      "platformAutomerge": true
-    },
-    {
-      "matchUpdateTypes": ["major"],
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true
-    }
-  ],
-  "lockFileMaintenance": {
-    "enabled": true,
-    "automerge": true,
-    "automergeType": "branch"
-  },
-  "vulnerabilityAlerts": {
-    "enabled": true,
-    "automerge": true
-  },
-  "prConcurrentLimit": 10,
-  "prHourlyLimit": 10,
-  "branchConcurrentLimit": 10,
-  "minimumReleaseAge": "0 days",
-  "internalChecksFilter": "none"
+  "extends": ["config:recommended", ":automergeAll"],
+  "timezone": "Asia/Shanghai"
 }
