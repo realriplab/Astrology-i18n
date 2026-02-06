@@ -4,8 +4,7 @@
     "config:recommended",
     ":pnpm",
     ":automergeAll",
-    ":disableDependencyDashboard",
-    "schedule:daily"
+    ":disableDependencyDashboard"
   ],
   "timezone": "Asia/Shanghai",
   "schedule": ["before 4:00am"]
