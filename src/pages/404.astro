@@ -34,9 +34,12 @@ const TEXTS = SUPPORTED_LANGS.reduce<
   };
   return acc;
 }, {});
+const supportedLangsJson = JSON.stringify(SUPPORTED_LANGS);
+const textsJson = JSON.stringify(TEXTS);
+const defaultLangJson = JSON.stringify(DEFAULT_LANG);
 ---
 
-<LandingLayout lang={lang} title={title} description={message} canonical={null} noindex>
+<LandingLayout lang={lang} title={title} description={message} noindex>
   <Prose>
     <p id="i18n-search-hint" class="text-center text-sm text-gray-500 dark:text-gray-400">
       {searchHint}
@@ -71,10 +74,16 @@ const TEXTS = SUPPORTED_LANGS.reduce<
   </div>
 </LandingLayout>
 
-<script is:inline>
-  const SUPPORTED = JSON.parse('{JSON.stringify(SUPPORTED_LANGS)}');
-  const TEXTS = JSON.parse('{JSON.stringify(TEXTS)}');
-  const DEFAULT_LANG = JSON.parse('{JSON.stringify(DEFAULT_LANG)}');
+<script
+  is:inline
+  data-supported-langs={supportedLangsJson}
+  data-texts={textsJson}
+  data-default-lang={defaultLangJson}
+>
+  const scriptEl = document.currentScript;
+  const SUPPORTED = JSON.parse(scriptEl?.getAttribute('data-supported-langs') ?? '[]');
+  const TEXTS = JSON.parse(scriptEl?.getAttribute('data-texts') ?? '{}');
+  const DEFAULT_LANG = JSON.parse(scriptEl?.getAttribute('data-default-lang') ?? '"en"');
   (function () {
     try {
       function pickLang() {

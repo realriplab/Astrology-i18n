@@ -411,7 +411,7 @@ function getMonthLabels(
     });
 }
 
-const { username, year = 'last', repo } = Astro.props;
+const { username, year = 'last', repo } = Astro.props as Props;
 
 function makeEmptyLastYear(): GitHubActivityApiResponse {
   const today = new Date();
@@ -455,6 +455,9 @@ const legendColors = range(5).map((i) => {
 });
 
 const firstActivity = activities[0];
+if (!firstActivity) {
+  throw new Error('GitHub activity data must not be empty.');
+}
 const activityYear = getYear(parseISO(firstActivity.date));
 const weeks = groupByWeeks(activities, weekStart);
 const labels = {

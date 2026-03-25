@@ -12,7 +12,7 @@ const { lang, class: className } = Astro.props as Props;
 const resolvedLang = ((Astro.currentLocale as Lang | undefined) ??
   (lang as Lang | undefined) ??
   'zh') as Lang;
-const alignmentClass = resolvedLang === 'ar' ? 'text-right' : 'text-left';
+const alignmentClass = 'text-left';
 ---
 
 <div class={`lg:hidden hidden mobile-nav-glass ${className ?? ''}`.trim()} data-mobile-panel>
@@ -80,6 +80,7 @@ const alignmentClass = resolvedLang === 'ar' ? 'text-right' : 'text-left';
   registerPageInit('mobileAccordion', () => {
     const root = document.querySelector('[data-mobile-panel]');
     if (!root) return;
+    const panelRoot = root;
 
     function handleAccordionClick(e: Event) {
       const target = e.target;
@@ -91,14 +92,14 @@ const alignmentClass = resolvedLang === 'ar' ? 'text-right' : 'text-left';
       const id = trigger.getAttribute('data-accordion-trigger');
       if (!id) return;
 
-      const panel = root.querySelector(`[data-accordion-panel="${id}"]`);
+      const panel = panelRoot.querySelector(`[data-accordion-panel="${id}"]`);
       if (panel) panel.classList.toggle('hidden');
     }
 
-    root.addEventListener('click', handleAccordionClick);
+    panelRoot.addEventListener('click', handleAccordionClick);
 
     return () => {
-      root.removeEventListener('click', handleAccordionClick);
+      panelRoot.removeEventListener('click', handleAccordionClick);
     };
   });
 </script>

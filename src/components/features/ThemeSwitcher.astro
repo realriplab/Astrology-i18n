@@ -12,7 +12,7 @@ const { lang, class: className } = Astro.props as Props;
 const resolvedLang = ((Astro.currentLocale as Lang | undefined) ??
   (lang as Lang | undefined) ??
   'zh') as Lang;
-const alignmentClass = resolvedLang === 'ar' ? 'text-right' : 'text-left';
+const alignmentClass = 'text-left';
 
 const THEME_OPTIONS = [
   { value: 'light', label: t(resolvedLang, 'theme.light'), icon: 'lucide:sun' },

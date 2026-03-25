@@ -16,7 +16,7 @@ const { lang: langProp = 'zh' } = Astro.props as Props;
 const resolvedLang = ((Astro.currentLocale as Lang | undefined) ??
   (langProp as Lang | undefined) ??
   'zh') as Lang;
-const dir = resolvedLang === 'ar' ? 'rtl' : 'ltr';
+const dir = 'ltr';
 ---
 
 <!doctype html>

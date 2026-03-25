@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const LANGS = ['zh', 'en', 'fr', 'es', 'ru', 'ja', 'ko', 'pt', 'de', 'id'] as const;
@@ -15,7 +16,7 @@ const post = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     author: z.string().default('Astro'),
-    heroImage: z.string().url(),
+    heroImage: z.url(),
     heroImageAlt: z.string(),
     locales: z.enum(LANGS),
     draft: z.boolean().default(false),
@@ -43,7 +44,7 @@ const author = defineCollection({
       .array(
         z.object({
           label: z.string(),
-          url: z.string().url(),
+          url: z.url(),
         }),
       )
       .default([]),

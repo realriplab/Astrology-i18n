@@ -49,7 +49,7 @@ const pictureFormats: Array<'avif'> = ['avif'];
 
 const isRemote = typeof src === 'string' && /^(https?:)?\/\/.*/.test(src);
 
-const shouldInfer = inferSize ?? isRemote;
+const shouldInfer = inferSize ?? false;
 
 // CSS object-fit and object-position styles (ensure proper browser-side cropping)
 const fitClass =

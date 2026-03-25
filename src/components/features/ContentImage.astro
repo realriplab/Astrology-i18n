@@ -48,7 +48,6 @@ const cls = [props.class, 'h-auto max-w-full', rounded ? 'rounded-lg' : '']
       decoding={decoding}
       fetchpriority={fetchpriority}
       rounded={rounded}
-      inferSize={!hasSize}
       {...(typeof props.width === 'number' ? { width: props.width } : {})}
       {...(typeof props.height === 'number' ? { height: props.height } : {})}
     />
