@@ -1,6 +1,5 @@
 ---
-import { Image } from 'astro:assets';
-import OptimizedPicture from './OptimizedPicture.astro';
+import { Image, getImage, inferRemoteSize } from 'astro:assets';
 
 interface Props {
   src: string;
@@ -34,23 +33,27 @@ const rounded = props.rounded ?? true;
 const cls = [props.class, 'h-auto max-w-full', rounded ? 'rounded-lg' : '']
   .filter(Boolean)
   .join(' ');
+const remoteSize = isRemote ? await inferRemoteSize(props.src) : undefined;
+const remoteWidth = typeof props.width === 'number' ? props.width : remoteSize?.width;
+const remoteHeight = typeof props.height === 'number' ? props.height : remoteSize?.height;
+const optimizedRemoteImage = isRemote
+  ? await getImage({
+      src: props.src,
+      alt: props.alt || '',
+      width: remoteWidth,
+      height: remoteHeight,
+      format: 'avif',
+      loading,
+      decoding,
+      fetchpriority,
+      priority: isPriority,
+    })
+  : null;
 ---
 
 {
   isRemote ? (
-    <OptimizedPicture
-      src={props.src}
-      alt={props.alt || ''}
-      class={cls}
-      priority={isPriority}
-      sizes={sizes}
-      loading={loading}
-      decoding={decoding}
-      fetchpriority={fetchpriority}
-      rounded={rounded}
-      {...(typeof props.width === 'number' ? { width: props.width } : {})}
-      {...(typeof props.height === 'number' ? { height: props.height } : {})}
-    />
+    <img {...optimizedRemoteImage.attributes} class={cls} />
   ) : hasSize ? (
     <Image
       src={props.src as any}

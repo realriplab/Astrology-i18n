@@ -1,5 +1,5 @@
 ---
-import { Image, Picture } from 'astro:assets';
+import { Image, Picture, inferRemoteSize } from 'astro:assets';
 
 type LayoutType = 'constrained' | 'full-width' | 'fixed' | 'none';
 type FitType = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
@@ -50,6 +50,9 @@ const pictureFormats: Array<'avif'> = ['avif'];
 const isRemote = typeof src === 'string' && /^(https?:)?\/\/.*/.test(src);
 
 const shouldInfer = inferSize ?? false;
+const remoteSize = isRemote ? await inferRemoteSize(src) : undefined;
+const resolvedWidth = typeof width === 'number' ? width : remoteSize?.width;
+const resolvedHeight = typeof height === 'number' ? height : remoteSize?.height;
 
 // CSS object-fit and object-position styles (ensure proper browser-side cropping)
 const fitClass =
@@ -75,6 +78,7 @@ const imgClass = [className, fitClass, positionClass, roundedForImg].filter(Bool
 const pictureClass = [className, fitClass, positionClass, roundedForPicture]
   .filter(Boolean)
   .join(' ');
+const useInferSize = shouldInfer && !isRemote;
 
 const resolvedLoading = priority ? 'eager' : (loading ?? 'lazy');
 const resolvedDecoding = decoding ?? (priority ? 'sync' : 'async');
@@ -88,8 +92,8 @@ const baseImgProps = {
   ...(layout ? { layout } : {}),
   ...(fit ? { fit } : {}),
   ...(position ? { position } : {}),
-  ...(typeof width === 'number' ? { width } : {}),
-  ...(typeof height === 'number' ? { height } : {}),
+  ...(typeof resolvedWidth === 'number' ? { width: resolvedWidth } : {}),
+  ...(typeof resolvedHeight === 'number' ? { height: resolvedHeight } : {}),
   priority,
   loading: resolvedLoading,
   decoding: resolvedDecoding,
@@ -104,8 +108,8 @@ const basePictureProps = {
   ...(layout ? { layout } : {}),
   ...(fit ? { fit } : {}),
   ...(position ? { position } : {}),
-  ...(typeof width === 'number' ? { width } : {}),
-  ...(typeof height === 'number' ? { height } : {}),
+  ...(typeof resolvedWidth === 'number' ? { width: resolvedWidth } : {}),
+  ...(typeof resolvedHeight === 'number' ? { height: resolvedHeight } : {}),
   priority,
   loading: resolvedLoading,
   decoding: resolvedDecoding,
@@ -115,25 +119,9 @@ const basePictureProps = {
 ---
 
 {
-  isRemote && !shouldInfer ? (
-    <img
-      src={src}
-      alt={alt}
-      class={imgClass}
-      loading={resolvedLoading}
-      fetchpriority={resolvedFetchpriority}
-      decoding={resolvedDecoding}
-      {...(sizes ? { sizes } : {})}
-    />
-  ) : asPicture ? (
-    shouldInfer ? (
-      <Picture src={src as any} {...basePictureProps} inferSize={true} />
-    ) : (
-      <Picture src={src as any} {...basePictureProps} inferSize={false} />
-    )
-  ) : shouldInfer ? (
-    <Image src={src as any} {...baseImgProps} inferSize={true} />
+  asPicture ? (
+    <Picture src={src as any} {...basePictureProps} {...(useInferSize ? { inferSize: true } : {})} />
   ) : (
-    <Image src={src as any} {...baseImgProps} inferSize={false} />
+    <Image src={src as any} {...baseImgProps} {...(useInferSize ? { inferSize: true } : {})} />
   )
 }
