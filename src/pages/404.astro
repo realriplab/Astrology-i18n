@@ -2,8 +2,9 @@
 import LandingLayout from '@/layouts/LandingLayout.astro';
 import Prose from '@/features/Prose.astro';
 import Search from 'astro-pagefind/components/Search';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { t } from '@/utils/translations';
-import { DEFAULT_LANG, SUPPORTED_LANGS, toAbsolute } from '@/utils/i18n';
+import { DEFAULT_LANG, SUPPORTED_LANGS } from '@/utils/i18n';
 
 export const prerender = true;
 
@@ -11,6 +12,8 @@ const lang = DEFAULT_LANG;
 const title = t(lang, 'notFound.title');
 const message = t(lang, 'notFound.message');
 const searchHint = t(lang, 'search.subtitle');
+const homePath = getRelativeLocaleUrl(lang, '/');
+const postsPath = getRelativeLocaleUrl(lang, '/posts/');
 const TEXTS = SUPPORTED_LANGS.reduce<
   Record<
     string,
@@ -31,8 +34,8 @@ const TEXTS = SUPPORTED_LANGS.reduce<
     search: t(l as any, 'search.subtitle'),
     back: t(l as any, 'notFound.backToHome'),
     browse: t(l as any, 'notFound.browsePosts'),
-    home: toAbsolute(l as any, '/'),
-    posts: toAbsolute(l as any, '/posts/'),
+    home: getRelativeLocaleUrl(l as any, '/'),
+    posts: getRelativeLocaleUrl(l as any, '/posts/'),
   };
   return acc;
 }, {});
@@ -58,7 +61,7 @@ const defaultLangJson = JSON.stringify(DEFAULT_LANG);
     <div class="inline-flex flex-wrap items-center justify-center gap-2">
       <a
         id="i18n-home-link-1"
-        href={toAbsolute(lang, '/')}
+        href={homePath}
         class="inline-flex items-center gap-2 rounded-md border border-gray-200/70 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-800/70 dark:text-gray-300 dark:hover:bg-gray-800"
       >
         <span aria-hidden>←</span>
@@ -66,7 +69,7 @@ const defaultLangJson = JSON.stringify(DEFAULT_LANG);
       </a>
       <a
         id="i18n-home-link-2"
-        href={toAbsolute(lang, '/posts/')}
+        href={postsPath}
         class="inline-flex items-center gap-2 rounded-md border border-gray-200/70 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-800/70 dark:text-gray-300 dark:hover:bg-gray-800"
       >
         <span aria-hidden>🧭</span>

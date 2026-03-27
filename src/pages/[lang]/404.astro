@@ -2,9 +2,10 @@
 import LandingLayout from '@/layouts/LandingLayout.astro';
 import Prose from '@/features/Prose.astro';
 import Search from 'astro-pagefind/components/Search';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { t } from '@/utils/translations';
 import type { Lang } from '@/utils/i18n';
-import { DEFAULT_LANG, SUPPORTED_LANGS, toAbsolute } from '@/utils/i18n';
+import { DEFAULT_LANG, SUPPORTED_LANGS } from '@/utils/i18n';
 
 export const prerender = true;
 
@@ -35,14 +36,14 @@ const searchHint = t(lang, 'search.subtitle');
   <div class="mt-6 text-center">
     <div class="inline-flex flex-wrap items-center justify-center gap-2">
       <a
-        href={toAbsolute(lang, '/')}
+        href={getRelativeLocaleUrl(lang, '/')}
         class="inline-flex items-center gap-2 rounded-md border border-gray-200/70 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-800/70 dark:text-gray-300 dark:hover:bg-gray-800"
       >
         <span aria-hidden>←</span>
         <span>{t(lang, 'notFound.backToHome')}</span>
       </a>
       <a
-        href={toAbsolute(lang, '/posts/')}
+        href={getRelativeLocaleUrl(lang, '/posts/')}
         class="inline-flex items-center gap-2 rounded-md border border-gray-200/70 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-800/70 dark:text-gray-300 dark:hover:bg-gray-800"
       >
         <span aria-hidden>🧭</span>

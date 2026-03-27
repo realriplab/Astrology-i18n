@@ -1,9 +1,10 @@
 ---
 import { type CollectionEntry, render } from 'astro:content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import RelatedList from '@/widgets/RelatedList.astro';
 import PostLayout from '@/layouts/PostLayout.astro';
 import type { Lang } from '@/utils/i18n';
-import { DEFAULT_LANG, SUPPORTED_LANGS, toAbsolute } from '@/utils/i18n';
+import { DEFAULT_LANG, SUPPORTED_LANGS } from '@/utils/i18n';
 import { getPublishedPosts } from '@/utils/posts';
 
 export const prerender = true;
@@ -49,7 +50,7 @@ const modifiedTime = (remarkPluginFrontmatter as any)?.lastModified || entry.dat
 const author = entry.data.author;
 const section = entry.data.category;
 const tags = entry.data.tags as string[] | undefined;
-const authorUrl = toAbsolute(lang, '/author/');
+const authorUrl = getRelativeLocaleUrl(lang, '/author/');
 const heroImage = entry.data.heroImage;
 const heroImageAlt = entry.data.heroImageAlt;
 const postLayoutProps = {

@@ -1,9 +1,9 @@
 ---
 import type { Lang } from '@/utils/i18n';
-import { SUPPORTED_LANGS, DEFAULT_LANG, toAbsolute } from '@/utils/i18n';
+import { SUPPORTED_LANGS, DEFAULT_LANG } from '@/utils/i18n';
 import { t } from '@/utils/translations';
 import { SEO } from 'astro-seo';
-import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getAbsoluteLocaleUrl, getRelativeLocaleUrl } from 'astro:i18n';
 
 interface Props {
   lang: Lang;
@@ -92,9 +92,9 @@ const ogAlternateLocales = SUPPORTED_LANGS.filter((l) => l !== resolvedLang).map
 
 const languageAlternates = SUPPORTED_LANGS.map((l) => ({
   hrefLang: l,
-  href: new URL(toAbsolute(l, Astro.url.pathname), Astro.site!).href,
+  href: getAbsoluteLocaleUrl(l, Astro.url.pathname),
 }));
-const xDefaultHref = new URL(toAbsolute(DEFAULT_LANG, Astro.url.pathname), Astro.site!).href;
+const xDefaultHref = getAbsoluteLocaleUrl(DEFAULT_LANG, Astro.url.pathname);
 
 const rawCanonical = canonical || new URL(Astro.url.pathname, Astro.site!).href;
 const finalCanonical = (() => {
