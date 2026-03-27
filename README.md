@@ -67,7 +67,9 @@ Updated for Astro v6!
     ```
     Open [http://localhost:4321](http://localhost:4321) to view it in the browser.
 
-### Build for Production
+### Build & Deploy
+
+This theme builds as a static site. `pnpm run build` writes the production output to `dist/`, and `wrangler.jsonc` is configured to serve that folder as static assets on Cloudflare.
 
 To build your site for production deployment:
 
@@ -79,6 +81,12 @@ To preview the production build locally:
 
 ```bash
 pnpm run preview
+```
+
+To deploy the built static output with Wrangler:
+
+```bash
+pnpm dlx wrangler deploy
 ```
 
 ## 📂 Project Structure
@@ -144,7 +152,8 @@ To display the contribution graph on the Author page:
     ```env
     GITHUB_TOKEN=your_personal_access_token
     ```
-2.  **Production**: Add `GITHUB_TOKEN` to your deployment platform's environment variables.
+2.  **Production**: Add `GITHUB_TOKEN` to your deployment platform's environment variables if you want live GitHub activity data.
+3.  **Fallback**: If `GITHUB_TOKEN` is not set, the theme falls back to an empty calendar so static builds stay reliable.
 
 ### Analytics
 
