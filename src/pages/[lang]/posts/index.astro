@@ -5,7 +5,7 @@ import PostCardText from '@/cards/PostCardText.astro';
 import type { Lang } from '@/utils/i18n';
 import { DEFAULT_LANG, SUPPORTED_LANGS } from '@/utils/i18n';
 import { t } from '@/utils/translations';
-import { getPostsForLang, postUrl, type PostEntry } from '@/utils/posts';
+import { getPostsForLang, postUrl } from '@/utils/posts';
 
 export const prerender = true;
 
@@ -53,7 +53,7 @@ const description = t(lang, 'common.pagination.totalPostsWithLang', {
       {
         items.map((p) => (
           <PostCardText
-            href={postUrl(p as PostEntry, lang)}
+            href={postUrl(p, lang)}
             title={p.data.title}
             date={p.data.pubDate}
             category={p.data.category}

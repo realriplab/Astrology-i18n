@@ -13,7 +13,7 @@ export default defineConfig({
   site: 'https://astrology.idimi.com',
   trailingSlash: 'always',
   build: {
-    concurrency: 4,
+    concurrency: 6,
   },
 
   prefetch: {
@@ -71,7 +71,7 @@ export default defineConfig({
     }),
     icon({
       include: {
-        lucide: ['*'],
+        lucide: ['github', 'globe', 'menu', 'monitor', 'moon', 'rss', 'search', 'sun', 'x'],
       },
     }),
   ],
