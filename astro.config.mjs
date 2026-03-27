@@ -34,6 +34,14 @@ export default defineConfig({
   image: {
     responsiveStyles: true,
     layout: 'constrained',
+    service: {
+      config: {
+        jpeg: { mozjpeg: true },
+        webp: { effort: 6, alphaQuality: 80 },
+        avif: { effort: 4, chromaSubsampling: '4:2:0' },
+        png: { compressionLevel: 9 },
+      },
+    },
     remotePatterns: [{ protocol: 'https', hostname: '*.unsplash.com' }],
   },
 
