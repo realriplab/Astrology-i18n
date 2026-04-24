@@ -17,7 +17,7 @@
     "seo",
     "multilingual"
   ],
-  "packageManager": "pnpm@10.33.1",
+  "packageManager": "pnpm@10.33.2",
   "pnpm": {
     "onlyBuiltDependencies": [
       "sharp",
