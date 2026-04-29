@@ -8,13 +8,13 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Node](https://img.shields.io/badge/Node-%E2%89%A5%2020-339933?logo=node.js)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-polyglow.idimi.com-0f172a)](https://polyglow.idimi.com)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-polyglow.idimi.com-0f172a)](https://idimi.com)
 
 **Polyglow** is a multilingual Astro theme for founders, writers, publishers, and teams who want one content site to serve multiple markets without maintaining multiple codebases.
 
 It gives you locale-aware routing, typed content collections, built-in SEO, fast search, RSS, responsive images, and an editorial reading experience that already feels production-ready.
 
-[View live demo](https://polyglow.idimi.com) · [Get started](#quick-start) · [See why it converts](#why-teams-pick-polyglow)
+[View live demo](https://idimi.com) · [Get started](#quick-start) · [See why it converts](#why-teams-pick-polyglow)
 
 <img src="./public/screenshot.webp" alt="Polyglow theme preview" width="100%" />
 
