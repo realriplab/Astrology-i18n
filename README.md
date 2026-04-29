@@ -8,7 +8,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Node](https://img.shields.io/badge/Node-%E2%89%A5%2020-339933?logo=node.js)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-polyglow.idimi.com-0f172a)](https://idimi.com)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-idimi.com-0f172a)](https://idimi.com)
 
 **Polyglow** is a multilingual Astro theme for founders, writers, publishers, and teams who want one content site to serve multiple markets without maintaining multiple codebases.
 
