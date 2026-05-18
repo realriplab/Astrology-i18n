@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "polyglow-next",
+  "name": "polyglow",
   "compatibility_date": "2026-05-11",
   "assets": {
     "directory": "./dist",
