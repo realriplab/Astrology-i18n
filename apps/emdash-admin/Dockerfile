@@ -23,6 +23,8 @@ ENV DATABASE_PATH=/app/data/emdash.db
 ENV UPLOADS_DIR=/app/data/uploads
 
 RUN mkdir -p /app/data/uploads && chown -R node:node /app
+COPY --from=builder --chown=node:node /app/package.json ./package.json
+COPY --from=builder --chown=node:node /app/node_modules ./node_modules
 COPY --from=builder --chown=node:node /app/dist ./dist
 
 USER node
