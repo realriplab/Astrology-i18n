@@ -137,6 +137,17 @@ PUBLIC_GTM_ENABLED=true
 PUBLIC_GTM_ID=GTM-XXXXXXX
 ```
 
+### Google AdSense
+
+Google AdSense 支持默认关闭。开启后，站点会在共享布局中加载官方 async AdSense 脚本。
+
+通过公开环境变量配置：
+
+```bash
+PUBLIC_ADSENSE_ENABLED=true
+PUBLIC_ADSENSE_CLIENT_ID=ca-pub-0000000000000000
+```
+
 ## 反馈
 
 疑问、建议和 bug 反馈请提交到 [GitHub Issues](https://github.com/realriplab/Polyglow/issues)。

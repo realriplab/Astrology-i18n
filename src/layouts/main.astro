@@ -12,6 +12,7 @@ import Footer from "@/components/ui/Footer.astro"
 import DynamicGlass from "@/components/features/DynamicGlass.astro"
 import GTMHead from "@/components/analytics/GTMHead.astro"
 import GTMBody from "@/components/analytics/GTMBody.astro"
+import Adsense from "@/components/widgets/Adsense.astro"
 
 interface Props {
   lang: Locale
@@ -138,6 +139,7 @@ const alternateOgLocales = LOCALES.filter((locale) => locale !== lang).map(
       set:html={JSON.stringify(jsonLdItems)}
     />
     <GTMHead />
+    <Adsense />
   </head>
   <body>
     <GTMBody />

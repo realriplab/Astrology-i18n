@@ -1,0 +1,34 @@
+---
+import { SITE_CONFIG } from "@/config/site"
+
+const { enabled, clientId } = SITE_CONFIG.analytics.googleAdsense
+const shouldRender = enabled && clientId.length > 0
+const scriptSrc = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(
+  clientId
+)}`
+---
+
+{
+  shouldRender && (
+    <>
+      <script is:inline async src={scriptSrc} crossorigin="anonymous" />
+      <script>
+        import { registerPageInit } from "@/utils/page-init"
+
+        registerPageInit("adsense", () => {
+          const adsbygoogle = (window.adsbygoogle = window.adsbygoogle || [])
+
+          document
+            .querySelectorAll("ins.adsbygoogle:not([data-adsbygoogle-status])")
+            .forEach(() => {
+              try {
+                adsbygoogle.push({})
+              } catch (error) {
+                console.error("[Adsense] Error pushing ad:", error)
+              }
+            })
+        })
+      </script>
+    </>
+  )
+}

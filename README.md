@@ -140,6 +140,18 @@ PUBLIC_GTM_ENABLED=true
 PUBLIC_GTM_ID=GTM-XXXXXXX
 ```
 
+### Google AdSense
+
+Google AdSense support is optional and disabled by default. When enabled, the
+site loads the official async AdSense script from the shared layout.
+
+Configure it with public environment variables:
+
+```bash
+PUBLIC_ADSENSE_ENABLED=true
+PUBLIC_ADSENSE_CLIENT_ID=ca-pub-0000000000000000
+```
+
 ## Feedback
 
 Questions, ideas, and bug reports go to [GitHub Issues](https://github.com/realriplab/Polyglow/issues).
