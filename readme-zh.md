@@ -148,6 +148,25 @@ PUBLIC_ADSENSE_ENABLED=true
 PUBLIC_ADSENSE_CLIENT_ID=ca-pub-0000000000000000
 ```
 
+### x402
+
+x402 元数据支持默认关闭。该 widget 被导入到具体页面或布局后，会在页面 head 中发布机器可读的支付元数据，同时保持
+Polyglow 为静态站点。它默认不挂载到共享布局。它本身不执行 HTTP 402 支付拦截；真正的支付校验需要接入 x402
+middleware，或在 Cloudflare 上使用 EmDash x402 Astro integration。
+
+通过公开环境变量配置：
+
+```bash
+PUBLIC_X402_ENABLED=true
+PUBLIC_X402_PAY_TO=0xYourWalletAddress
+PUBLIC_X402_NETWORK=eip155:8453
+PUBLIC_X402_PRICE=$0.01
+PUBLIC_X402_DESCRIPTION=Voluntary x402 payment support for Polyglow content.
+PUBLIC_X402_FACILITATOR_URL=https://x402.org/facilitator
+```
+
+只在需要发布 x402 元数据的页面或布局中使用 `src/components/widgets/X402.astro`。
+
 ## 反馈
 
 疑问、建议和 bug 反馈请提交到 [GitHub Issues](https://github.com/realriplab/Polyglow/issues)。

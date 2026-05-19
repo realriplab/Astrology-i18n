@@ -1,0 +1,45 @@
+---
+import { SITE_CONFIG } from "@/config/site"
+
+const { enabled, payTo, network, price, description, facilitatorUrl } =
+  SITE_CONFIG.payments.x402
+const shouldRender =
+  enabled &&
+  payTo.length > 0 &&
+  network.length > 0 &&
+  price.length > 0 &&
+  facilitatorUrl.length > 0
+const paymentMetadata = {
+  protocol: "x402",
+  version: "1",
+  resource: SITE_CONFIG.url,
+  description,
+  mimeType: "text/html",
+  facilitatorUrl,
+  accepts: [
+    {
+      scheme: "exact",
+      price,
+      network,
+      payTo,
+    },
+  ],
+}
+---
+
+{
+  shouldRender && (
+    <>
+      <meta name="x402:pay-to" content={payTo} />
+      <meta name="x402:network" content={network} />
+      <meta name="x402:price" content={price} />
+      <meta name="x402:facilitator-url" content={facilitatorUrl} />
+      <script
+        is:inline
+        id="polyglow-x402"
+        type="application/json"
+        set:html={JSON.stringify(paymentMetadata)}
+      />
+    </>
+  )
+}

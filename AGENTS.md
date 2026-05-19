@@ -19,6 +19,7 @@ services, Cloudflare, or production credentials.
 - `astro-icon` with the configured Lucide icon allowlist.
 - `@astrojs/partytown` for optional Google Tag Manager scripts.
 - Optional Google AdSense script support.
+- Optional x402 payment metadata widget.
 - Optional Cloudflare Workers Static Assets deployment.
 - Vitest for unit tests.
 
@@ -64,6 +65,10 @@ Use Node.js 24 or newer and pnpm 11. Do not add npm, yarn, or bun lockfiles.
 - Google AdSense must stay optional. Configure it through
   `SITE_CONFIG.analytics.googleAdsense` and public env vars; keep publisher IDs
   out of layout files.
+- x402 support must stay optional. Configure the static widget through
+  `SITE_CONFIG.payments.x402` and public env vars. Keep `X402.astro` unmounted
+  from the shared layout unless explicitly requested. Do not add HTTP 402
+  enforcement or Cloudflare-only middleware unless explicitly requested.
 - Preserve Astro `trailingSlash: "always"` behavior and locale-prefixed routes.
 - Preserve RTL support for Arabic routes.
 - Keep configuration in `src/config/*`; do not scatter site-wide constants

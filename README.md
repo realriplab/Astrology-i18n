@@ -152,6 +152,29 @@ PUBLIC_ADSENSE_ENABLED=true
 PUBLIC_ADSENSE_CLIENT_ID=ca-pub-0000000000000000
 ```
 
+### x402
+
+x402 metadata support is optional and disabled by default. The widget publishes
+machine-readable payment metadata when imported into a page or layout, while
+keeping Polyglow a static site. It is not mounted in the shared layout by
+default. It does not enforce HTTP 402 payment by itself; payment enforcement
+requires a server middleware integration such as x402 middleware or the EmDash
+x402 Astro integration on Cloudflare.
+
+Configure it with public environment variables:
+
+```bash
+PUBLIC_X402_ENABLED=true
+PUBLIC_X402_PAY_TO=0xYourWalletAddress
+PUBLIC_X402_NETWORK=eip155:8453
+PUBLIC_X402_PRICE=$0.01
+PUBLIC_X402_DESCRIPTION=Voluntary x402 payment support for Polyglow content.
+PUBLIC_X402_FACILITATOR_URL=https://x402.org/facilitator
+```
+
+Use `src/components/widgets/X402.astro` only on pages or layouts where x402
+metadata should be published.
+
 ## Feedback
 
 Questions, ideas, and bug reports go to [GitHub Issues](https://github.com/realriplab/Polyglow/issues).
