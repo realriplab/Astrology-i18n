@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import { DEFAULT_LOCALE, LOCALES, getLocaleMeta } from "@/config/locales"
 import { canonicalUrl, buildAlternates, localePath } from "@/utils/routes"
+import { normalizeMetaDescription } from "@/utils/seo"
 import {
   articleJsonLd,
   webPageJsonLd,
@@ -57,5 +58,30 @@ describe("structured data language metadata", () => {
         ],
       }).inLanguage
     ).toBe(language)
+  })
+})
+
+describe("SEO meta description helpers", () => {
+  it("expands short English article descriptions into the expected range", () => {
+    const description = normalizeMetaDescription(
+      "A concise invest note on acfun, media assets, and market cycles, with attention to media, risk.",
+      [
+        "It adds context for invest readers.",
+        "It supports later review.",
+        "Inside Polyglow.",
+      ]
+    )
+
+    expect(description.length).toBeGreaterThanOrEqual(140)
+    expect(description.length).toBeLessThanOrEqual(160)
+  })
+
+  it("preserves descriptions that already fit the expected range", () => {
+    const description =
+      "Polyglow is a multilingual Astro content theme for essays, research notes, and knowledge archives with fast static pages, search, RSS, and SEO structure."
+
+    expect(normalizeMetaDescription(description, "Unused fallback.")).toBe(
+      description
+    )
   })
 })

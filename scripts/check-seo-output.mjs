@@ -139,6 +139,7 @@ function validateHtml(file) {
   const title = html.match(/<title>([^<]+)<\/title>/i)?.[1]?.trim()
   const canonical = html.match(/<link[^>]+rel="canonical"[^>]+>/i)?.[0]
   const description = html.match(/<meta[^>]+name="description"[^>]+>/i)?.[0]
+  const descriptionContent = extractAttr(description ?? "", "content") ?? ""
   const robots = html.match(/<meta[^>]+name="robots"[^>]+>/i)?.[0]
   const contentLanguage = html.match(
     /<meta[^>]+http-equiv="content-language"[^>]+>/i
@@ -174,7 +175,6 @@ function validateHtml(file) {
     if (title && (title.length < 40 || title.length > 60)) {
       fail(`${rel}: homepage title length is outside 40-60 characters`)
     }
-    const descriptionContent = extractAttr(description ?? "", "content") ?? ""
     if (
       descriptionContent.length < 140 ||
       descriptionContent.length > 160
@@ -184,6 +184,13 @@ function validateHtml(file) {
     if (!/<h3\b/i.test(html)) {
       fail(`${rel}: homepage missing h3 heading`)
     }
+  }
+  if (
+    locale === "en" &&
+    /^dist\/en\/posts\/(?!index\.html)(?!\d+\/)[^/]+\/index\.html$/.test(rel) &&
+    (descriptionContent.length < 140 || descriptionContent.length > 160)
+  ) {
+    fail(`${rel}: article meta description length is outside 140-160 characters`)
   }
   if (!html.includes('name="twitter:site"')) {
     fail(`${rel}: missing twitter:site meta`)

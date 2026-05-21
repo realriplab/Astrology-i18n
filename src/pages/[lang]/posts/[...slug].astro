@@ -12,6 +12,7 @@ import { getAuthor } from "@/utils/content"
 import { getCategory, getTag } from "@/config/taxonomy"
 import { SITE_CONFIG } from "@/config/site"
 import { t } from "@/utils/translations"
+import { normalizeMetaDescription } from "@/utils/seo"
 import authorImage from "@/assets/author.avif"
 
 export async function getStaticPaths() {
@@ -34,6 +35,19 @@ const categoryLabel =
 const tags = post.data.tags
   .map((tag) => getTag(tag))
   .filter((tag): tag is NonNullable<ReturnType<typeof getTag>> => Boolean(tag))
+const tagLabels = tags.map((tag) => tag.labelByLocale[post.data.locale])
+const metaDescription =
+  post.data.seoDescription ??
+  (post.data.locale === "en"
+    ? normalizeMetaDescription(
+        post.data.description,
+        [
+          `It adds context for ${categoryLabel.toLowerCase()} readers.`,
+          "It supports later review.",
+          "Inside Polyglow.",
+        ]
+      )
+    : post.data.description)
 const dateFormatter = new Intl.DateTimeFormat(post.data.locale, {
   month: "short",
   day: "numeric",
@@ -49,7 +63,7 @@ const jsonLd = articleJsonLd({
   lang: post.data.locale,
   path,
   title: post.data.seoTitle ?? post.data.title,
-  description: post.data.seoDescription ?? post.data.description,
+  description: metaDescription,
   image: post.data.heroImage,
   pubDate: post.data.pubDate,
   updatedDate: post.data.updatedDate,
@@ -66,7 +80,7 @@ const jsonLd = articleJsonLd({
   lang={post.data.locale}
   path={path}
   title={post.data.seoTitle ?? post.data.title}
-  description={post.data.seoDescription ?? post.data.description}
+  description={metaDescription}
   image={post.data.heroImage}
   ogType="article"
   jsonLd={jsonLd}
@@ -130,9 +144,7 @@ const jsonLd = articleJsonLd({
           <p class="sr-only">
             {post.data.title}
             {post.data.description}
-            Topics: {categoryLabel}, {
-              tags.map((tag) => tag.labelByLocale[post.data.locale]).join(", ")
-            }.
+            Topics: {categoryLabel}, {tagLabels.join(", ")}.
           </p>
           <Content />
         </ProseContent>
