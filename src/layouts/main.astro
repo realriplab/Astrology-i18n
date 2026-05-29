@@ -1,7 +1,6 @@
 ---
 import "@/styles/global.css"
 import { SEO } from "astro-seo"
-import { optimizeRemoteImageUrl } from "@/config/assets"
 import { LOCALES, getLocaleMeta, type Locale } from "@/config/locales"
 import { SITE_CONFIG } from "@/config/site"
 import { buildAlternates, canonicalUrl } from "@/utils/routes"
@@ -47,13 +46,9 @@ const pageTitle =
     ? title
     : `${title} | ${SITE_CONFIG.name}`
 const canonical = canonicalUrl(lang, path)
-const isUnsplashImage = image.startsWith("https://images.unsplash.com/")
 const absoluteImage = image.startsWith("http")
   ? image
   : `${SITE_CONFIG.url}${image}`
-const preloadImage = isUnsplashImage
-  ? optimizeRemoteImageUrl(image, 720)
-  : undefined
 const baseJsonLd = [
   webSiteJsonLd(lang),
   webPageJsonLd({
@@ -84,25 +79,6 @@ const alternateOgLocales = LOCALES.filter((locale) => locale !== lang).map(
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="content-language" content={localeMeta.hreflang} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    {
-      isUnsplashImage && (
-        <>
-          <link
-            rel="preconnect"
-            href="https://images.unsplash.com"
-            crossorigin
-          />
-          <link rel="dns-prefetch" href="https://images.unsplash.com" />
-          <link
-            rel="preload"
-            as="image"
-            href={preloadImage}
-            fetchpriority="high"
-            crossorigin="anonymous"
-          />
-        </>
-      )
-    }
     <SEO
       title={pageTitle}
       description={pageDescription}
