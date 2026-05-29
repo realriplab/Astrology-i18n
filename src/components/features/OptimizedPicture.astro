@@ -1,14 +1,103 @@
 ---
-import { Image, Picture } from "astro:assets"
-import {
-  getImagePreset,
-  resolveImageDimensions,
-  resolveImageLoading,
-  type ImageFit,
-  type ImageLayout,
-  type ImageQuality,
-  type ImageVariant,
-} from "@/config/images"
+import { Image, Picture, type ImageMetadata } from "astro:assets"
+
+type ImageLayout = "constrained" | "full-width" | "fixed" | "none"
+type ImageFit = "contain" | "cover" | "fill" | "none" | "scale-down"
+type ImageQuality = "low" | "mid" | "high" | "max" | number
+type ImageVariant =
+  | "homeLead"
+  | "articleHero"
+  | "cardPortrait"
+  | "cardWide"
+  | "avatar"
+  | "logo"
+  | "content"
+
+interface ImagePreset {
+  layout: ImageLayout
+  fit: ImageFit
+  position: string
+  quality: ImageQuality
+  asPicture: boolean
+}
+
+const IMAGE_PRESETS = {
+  homeLead: {
+    layout: "constrained",
+    fit: "cover",
+    position: "center",
+    quality: "high",
+    asPicture: false,
+  },
+  articleHero: {
+    layout: "constrained",
+    fit: "cover",
+    position: "center",
+    quality: "mid",
+    asPicture: false,
+  },
+  cardPortrait: {
+    layout: "constrained",
+    fit: "cover",
+    position: "center",
+    quality: "mid",
+    asPicture: false,
+  },
+  cardWide: {
+    layout: "constrained",
+    fit: "cover",
+    position: "center",
+    quality: "mid",
+    asPicture: false,
+  },
+  avatar: {
+    layout: "fixed",
+    fit: "cover",
+    position: "center",
+    quality: "high",
+    asPicture: false,
+  },
+  logo: {
+    layout: "fixed",
+    fit: "contain",
+    position: "center",
+    quality: "max",
+    asPicture: false,
+  },
+  content: {
+    layout: "constrained",
+    fit: "cover",
+    position: "center",
+    quality: "mid",
+    asPicture: false,
+  },
+} as const satisfies Record<ImageVariant, ImagePreset>
+
+const resolveImageDimensions = (
+  source: string | ImageMetadata,
+  imageWidth?: number,
+  imageHeight?: number,
+  useInferSize = false
+): { width: number; height: number } | undefined => {
+  if (typeof source === "string") {
+    if (useInferSize) {
+      return undefined
+    }
+
+    if (!imageWidth || !imageHeight) {
+      throw new Error(
+        "Remote images require width and height from content metadata or inferSize."
+      )
+    }
+
+    return { width: imageWidth, height: imageHeight }
+  }
+
+  return {
+    width: imageWidth ?? source.width,
+    height: imageHeight ?? source.height,
+  }
+}
 
 interface Props {
   src: string | ImageMetadata
@@ -16,8 +105,6 @@ interface Props {
   variant?: ImageVariant
   width?: number
   height?: number
-  widths?: number[]
-  sizes?: string
   layout?: ImageLayout
   fit?: ImageFit
   position?: string
@@ -40,8 +127,6 @@ const {
   variant = "content",
   width,
   height,
-  widths,
-  sizes,
   layout,
   fit,
   position,
@@ -57,37 +142,35 @@ const {
   decoding,
   fetchpriority,
 } = Astro.props
-const preset = getImagePreset(variant)
-const isString = typeof src === "string"
-const stringSrc = isString ? (src as string) : undefined
-const isUnsplashImage = stringSrc?.startsWith("https://images.unsplash.com/")
-const assetFormat = isString ? undefined : (src as ImageMetadata).format
-const isSvgAsset = assetFormat === "svg"
-const isSvgString = stringSrc?.toLowerCase().split("?")[0]?.endsWith(".svg")
-const isSvgImage = isSvgAsset || isSvgString
-const resolvedSrc = src
+
+const preset = IMAGE_PRESETS[variant]
+const isStringSource = typeof src === "string"
+const stringSrc = isStringSource ? (src as string) : undefined
+const isRemoteImage = isStringSource ? /^https?:\/\//.test(stringSrc as string) : false
+const assetFormat = isStringSource ? undefined : (src as ImageMetadata).format
+const isSvgImage = isStringSource
+  ? stringSrc?.toLowerCase().split("?")[0]?.endsWith(".svg")
+  : assetFormat === "svg"
 const dimensions =
-  isSvgImage || (isString && inferSize)
+  isSvgImage || (isStringSource && inferSize)
     ? undefined
-    : resolveImageDimensions(src, width, height)
-const imageWidths = widths ?? preset.widths
-const imageSizes = sizes ?? preset.sizes
+    : resolveImageDimensions(src, width, height, inferSize)
 const imageLayout = layout ?? preset.layout
 const imageFit = fit ?? preset.fit
 const imagePosition = position ?? preset.position
 const imageQuality = quality ?? preset.quality
 const shouldRenderPicture = asPicture ?? preset.asPicture
-const loadingAttrs = resolveImageLoading({
-  priority,
-  loading,
-  decoding,
+const loadingAttrs = {
+  priority: priority ? true : undefined,
+  loading: loading ?? "lazy",
+  decoding: decoding ?? "async",
   fetchpriority,
-})
-const crossOrigin = isUnsplashImage ? "anonymous" : undefined
+}
+const crossOrigin = isRemoteImage ? "anonymous" : undefined
 const imageFormats = formats ?? ["avif", "webp"]
 const imageFallbackFormat = fallbackFormat ?? "webp"
 const imageFormat = format ?? "avif"
-const svgSrc = isString ? (resolvedSrc as string) : (resolvedSrc as ImageMetadata).src
+const svgSrc = isStringSource ? (src as string) : (src as ImageMetadata).src
 ---
 
 {
@@ -103,9 +186,9 @@ const svgSrc = isString ? (resolvedSrc as string) : (resolvedSrc as ImageMetadat
       crossorigin={crossOrigin}
       class={className}
     />
-  ) : isString && inferSize && shouldRenderPicture ? (
+  ) : isStringSource && inferSize && shouldRenderPicture ? (
     <Picture
-      src={resolvedSrc as string}
+      src={stringSrc as string}
       alt={alt}
       inferSize
       priority={loadingAttrs.priority}
@@ -114,8 +197,6 @@ const svgSrc = isString ? (resolvedSrc as string) : (resolvedSrc as ImageMetadat
       fetchpriority={loadingAttrs.fetchpriority}
       crossorigin={crossOrigin}
       class={className}
-      widths={imageWidths}
-      sizes={imageSizes}
       formats={imageFormats}
       fallbackFormat={imageFallbackFormat}
       layout={imageLayout}
@@ -123,9 +204,9 @@ const svgSrc = isString ? (resolvedSrc as string) : (resolvedSrc as ImageMetadat
       position={imagePosition}
       quality={imageQuality}
     />
-  ) : isString && shouldRenderPicture ? (
+  ) : isStringSource && shouldRenderPicture ? (
     <Picture
-      src={resolvedSrc as string}
+      src={stringSrc as string}
       alt={alt}
       width={dimensions?.width as number}
       height={dimensions?.height as number}
@@ -135,18 +216,51 @@ const svgSrc = isString ? (resolvedSrc as string) : (resolvedSrc as ImageMetadat
       fetchpriority={loadingAttrs.fetchpriority}
       crossorigin={crossOrigin}
       class={className}
-      widths={imageWidths}
-      sizes={imageSizes}
       formats={imageFormats}
       fallbackFormat={imageFallbackFormat}
       layout={imageLayout}
       fit={imageFit}
       position={imagePosition}
       quality={imageQuality}
+    />
+  ) : isStringSource && inferSize ? (
+    <Image
+      src={stringSrc as string}
+      alt={alt}
+      inferSize
+      priority={loadingAttrs.priority}
+      loading={loadingAttrs.loading}
+      decoding={loadingAttrs.decoding}
+      fetchpriority={loadingAttrs.fetchpriority}
+      crossorigin={crossOrigin}
+      class={className}
+      layout={imageLayout}
+      fit={imageFit}
+      position={imagePosition}
+      quality={imageQuality}
+      format={imageFormat}
+    />
+  ) : isStringSource ? (
+    <Image
+      src={stringSrc as string}
+      alt={alt}
+      width={dimensions?.width as number}
+      height={dimensions?.height as number}
+      priority={loadingAttrs.priority}
+      loading={loadingAttrs.loading}
+      decoding={loadingAttrs.decoding}
+      fetchpriority={loadingAttrs.fetchpriority}
+      crossorigin={crossOrigin}
+      class={className}
+      layout={imageLayout}
+      fit={imageFit}
+      position={imagePosition}
+      quality={imageQuality}
+      format={imageFormat}
     />
   ) : shouldRenderPicture ? (
     <Picture
-      src={resolvedSrc as ImageMetadata}
+      src={src as ImageMetadata}
       alt={alt}
       width={dimensions?.width as number}
       height={dimensions?.height as number}
@@ -156,8 +270,6 @@ const svgSrc = isString ? (resolvedSrc as string) : (resolvedSrc as ImageMetadat
       fetchpriority={loadingAttrs.fetchpriority}
       crossorigin={crossOrigin}
       class={className}
-      widths={imageWidths}
-      sizes={imageSizes}
       formats={imageFormats}
       fallbackFormat={imageFallbackFormat}
       layout={imageLayout}
@@ -165,48 +277,9 @@ const svgSrc = isString ? (resolvedSrc as string) : (resolvedSrc as ImageMetadat
       position={imagePosition}
       quality={imageQuality}
     />
-  ) : isString && inferSize ? (
-    <Image
-      src={resolvedSrc as string}
-      alt={alt}
-      inferSize
-      priority={loadingAttrs.priority}
-      loading={loadingAttrs.loading}
-      decoding={loadingAttrs.decoding}
-      fetchpriority={loadingAttrs.fetchpriority}
-      crossorigin={crossOrigin}
-      class={className}
-      widths={imageWidths}
-      sizes={imageSizes}
-      layout={imageLayout}
-      fit={imageFit}
-      position={imagePosition}
-      quality={imageQuality}
-      format={imageFormat}
-    />
-  ) : isString ? (
-    <Image
-      src={resolvedSrc as string}
-      alt={alt}
-      width={dimensions?.width as number}
-      height={dimensions?.height as number}
-      priority={loadingAttrs.priority}
-      loading={loadingAttrs.loading}
-      decoding={loadingAttrs.decoding}
-      fetchpriority={loadingAttrs.fetchpriority}
-      crossorigin={crossOrigin}
-      class={className}
-      widths={imageWidths}
-      sizes={imageSizes}
-      layout={imageLayout}
-      fit={imageFit}
-      position={imagePosition}
-      quality={imageQuality}
-      format={imageFormat}
-    />
   ) : (
     <Image
-      src={resolvedSrc as ImageMetadata}
+      src={src as ImageMetadata}
       alt={alt}
       width={dimensions?.width as number}
       height={dimensions?.height as number}
@@ -216,8 +289,6 @@ const svgSrc = isString ? (resolvedSrc as string) : (resolvedSrc as ImageMetadat
       fetchpriority={loadingAttrs.fetchpriority}
       crossorigin={crossOrigin}
       class={className}
-      widths={imageWidths}
-      sizes={imageSizes}
       layout={imageLayout}
       fit={imageFit}
       position={imagePosition}
