@@ -53,7 +53,7 @@ const x402ChargeMode = normalizeX402ChargeMode(
 const x402BotScoreThreshold = normalizeBotScoreThreshold(
   import.meta.env.PUBLIC_X402_BOT_SCORE_THRESHOLD
 )
-const socialXUrl = "https://x.com/polyglow"
+const socialXUrl = "https://x.com/realriplabs"
 const socialXHandle = `@${
   new URL(socialXUrl).pathname.split("/").filter(Boolean)[0] ?? "polyglow"
 }`
