@@ -38,6 +38,52 @@ assert.match(
   /<\/\.well-known\/agent-skills\/index\.json>;\s*rel="service-desc"/,
   "_headers must link the agent skills index"
 )
+assert.match(
+  headers,
+  /<\/\.well-known\/api-catalog>;\s*rel="api-catalog"/,
+  "_headers must expose the API catalog link relation"
+)
+assert.match(
+  headers,
+  /\/\.well-known\/api-catalog\s*\n\s*Content-Type:\s*application\/linkset\+json/,
+  "_headers must serve API catalog with application/linkset+json"
+)
+assert.match(
+  headers,
+  /\/auth\.md\s*\n\s*Content-Type:\s*text\/markdown/,
+  "_headers must serve auth.md as Markdown"
+)
+
+const apiCatalog = readJson("public/.well-known/api-catalog")
+assert.ok(Array.isArray(apiCatalog.linkset), "API catalog must contain a linkset array")
+assert.ok(
+  apiCatalog.linkset.some(
+    (entry) =>
+      entry.anchor === "https://polyglow.realrip.com/api" &&
+      Array.isArray(entry["service-desc"]) &&
+      entry["service-desc"].some((link) => link.href === "https://polyglow.realrip.com/openapi.json") &&
+      Array.isArray(entry["service-doc"]) &&
+      entry["service-doc"].some((link) => link.href === "https://polyglow.realrip.com/auth.md") &&
+      Array.isArray(entry.status) &&
+      entry.status.some((link) => link.href === "https://polyglow.realrip.com/api")
+  ),
+  "API catalog must describe the x402 API with service-desc, service-doc, and status links"
+)
+
+const openApi = readJson("public/openapi.json")
+assert.equal(openApi.openapi, "3.1.0")
+assert.equal(openApi.info.title, "Polyglow x402 API")
+assert.ok(openApi.paths["/api"], "OpenAPI spec must describe /api")
+assert.ok(openApi.paths["/api/v1"], "OpenAPI spec must describe /api/v1")
+assert.ok(
+  openApi.components?.securitySchemes?.x402,
+  "OpenAPI spec must document x402 payment requirements"
+)
+
+const authMd = read("public/auth.md")
+assert.match(authMd, /# Polyglow Agent Authentication/)
+assert.match(authMd, /x402/)
+assert.match(authMd, /does not publish an OAuth authorization server/)
 
 const skill = read("public/.well-known/agent-skills/polyglow-content/SKILL.md")
 const skillDigest = createHash("sha256").update(skill).digest("hex")

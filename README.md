@@ -162,7 +162,7 @@ PUBLIC_ADSENSE_CLIENT_ID=ca-pub-0000000000000000
 PUBLIC_X402_ENABLED=true
 PUBLIC_X402_PAY_TO=YourWalletAddress
 PUBLIC_X402_NETWORK=solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1
-PUBLIC_X402_PRICE=$0.01
+PUBLIC_X402_PRICE=$0.08
 PUBLIC_X402_DESCRIPTION=Voluntary x402 payment support for Polyglow content.
 PUBLIC_X402_FACILITATOR_URL=https://x402.org/facilitator
 PUBLIC_X402_CHARGE_MODE=all
@@ -192,17 +192,50 @@ Wrangler or the Cloudflare dashboard:
 X402_ENABLED=true
 X402_PAY_TO=YourWalletAddress
 X402_NETWORK=solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1
-X402_PRICE=$0.01
+X402_PRICE=$0.08
 X402_FACILITATOR_URL=https://x402.org/facilitator
 X402_BOT_ONLY=true
 X402_BOT_SCORE_THRESHOLD=30
 ```
+
+`X402_PAY_TO` should be set as a runtime secret. The other values can be
+runtime variables. The `x402.org` facilitator currently advertises Solana
+support for `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`; if a different
+facilitator is used, set `X402_NETWORK` to one of the networks returned by its
+`/supported` endpoint.
 
 `/api`, `/api/v1`, and localized post routes are routed through the adapter on
 Cloudflare. The API probe routes always require payment when the gateway is
 enabled; post routes charge bots when `X402_BOT_ONLY=true`. Platforms without a
 runtime adapter can still publish the static site and optional x402 metadata,
 but they cannot enforce payment.
+
+Verify a production deployment with:
+
+```bash
+curl -i https://your-domain.example/api
+curl -i https://your-domain.example/api/v1
+```
+
+Both requests should return `402 Payment Required` with a `payment-required`
+header when the gateway is enabled. For Polyglow production, this has been
+verified on `https://polyglow.realrip.com/api` and
+`https://polyglow.realrip.com/api/v1`.
+
+## Agent API Discovery
+
+Polyglow publishes static API discovery files for agents:
+
+- `/.well-known/api-catalog` exposes an RFC 9727 API catalog with linkset
+  entries for `/api` and `/api/v1`.
+- `/openapi.json` describes the x402 protected API probes.
+- `/auth.md` explains agent access and x402 payment flow.
+
+The project does not publish OAuth/OIDC metadata by default because it does not
+include an OAuth authorization server. Add
+`/.well-known/openid-configuration`, `/.well-known/oauth-authorization-server`,
+or `/.well-known/oauth-protected-resource` only when a deployment has a real
+issuer, token endpoint, JWKS endpoint, scopes, and registration policy.
 
 ## Design
 

@@ -4,9 +4,9 @@
 
 **Goal:** Add an optional Cloudflare Worker x402 gateway while preserving Polyglow's default static build.
 
-**Architecture:** Keep Astro output static. Add a Worker adapter that binds `ASSETS`, gates configured routes for bots with `x402-hono`, and falls back to static assets for ordinary requests.
+**Architecture:** Keep Astro output static. Add a Worker adapter that binds `ASSETS`, gates configured routes for bots with `@x402/hono`, and falls back to static assets for ordinary requests.
 
-**Tech Stack:** Astro 6 static output, Cloudflare Workers Static Assets, Hono, x402-hono, pnpm scripts.
+**Tech Stack:** Astro 6 static output, Cloudflare Workers Static Assets, Hono, `@x402/hono`, `@x402/core`, `@x402/svm`, pnpm scripts.
 
 ---
 
@@ -17,10 +17,10 @@
 - Modify: `wrangler.jsonc`
 - Modify: `.env.example`
 
-- [ ] Add `hono` and `x402-hono` as dependencies.
-- [ ] Add a Worker entry, asset binding, runtime vars, and `nodejs_compat` compatibility flag to `wrangler.jsonc`.
-- [ ] Document runtime variables in `.env.example` without real wallet values.
-- [ ] Run `pnpm install` and confirm `pnpm-lock.yaml` updates.
+- [x] Add `hono`, `@x402/hono`, `@x402/core`, and `@x402/svm` as dependencies.
+- [x] Add a Worker entry, asset binding, runtime vars, and `nodejs_compat` compatibility flag to `wrangler.jsonc`.
+- [x] Document runtime variables in `.env.example` without real wallet values.
+- [x] Run `pnpm install` and confirm `pnpm-lock.yaml` updates.
 
 ### Task 2: Write Gateway Verification Before Implementation
 
@@ -28,32 +28,32 @@
 - Create: `scripts/verify-x402-gateway.mjs`
 - Modify: `package.json`
 
-- [ ] Add `verify:x402` script.
-- [ ] Verify `wrangler.jsonc` has `main`, `assets.binding`, `run_worker_first`, `nodejs_compat`, and runtime vars.
-- [ ] Verify `src/x402/cloudflare-worker.ts` contains x402 middleware, static asset fallback, bot-only logic, and `/api` probes.
-- [ ] Run `pnpm verify:x402` and confirm it fails before Worker implementation.
+- [x] Add `verify:x402` script.
+- [x] Verify `wrangler.jsonc` has `main`, `assets.binding`, `run_worker_first`, `nodejs_compat`, and runtime vars.
+- [x] Verify `src/x402/cloudflare-worker.ts` contains x402 middleware, static asset fallback, bot-only logic, and `/api` probes.
+- [x] Run `pnpm verify:x402` and confirm it fails before Worker implementation.
 
 ### Task 3: Implement Cloudflare Worker Adapter
 
 **Files:**
 - Create: `src/x402/cloudflare-worker.ts`
 
-- [ ] Define an `Env` type for `ASSETS` and runtime vars.
-- [ ] Parse config with safe defaults.
-- [ ] Detect protected route prefixes.
-- [ ] Detect bot traffic using `request.cf.botManagement.score` when present and user-agent fallback otherwise.
-- [ ] Use `x402-hono` payment middleware on `/api`, `/api/v1`, and protected routes when enabled.
-- [ ] Serve static assets through `env.ASSETS.fetch(request)` after payment or when not gated.
+- [x] Define an `Env` type for `ASSETS` and runtime vars.
+- [x] Parse config with safe defaults.
+- [x] Detect protected route prefixes.
+- [x] Detect bot traffic using `request.cf.botManagement.score` when present and user-agent fallback otherwise.
+- [x] Use `@x402/hono` payment middleware on `/api`, `/api/v1`, and protected routes when enabled.
+- [x] Serve static assets through `env.ASSETS.fetch(request)` after payment or when not gated.
 
 ### Task 4: Validate Build and Static Compatibility
 
 **Files:**
 - No new source files.
 
-- [ ] Run `pnpm verify:x402`.
-- [ ] Run `pnpm verify:agent`.
-- [ ] Run `pnpm build`.
-- [ ] Confirm `dist` remains a usable static site.
+- [x] Run `pnpm verify:x402`.
+- [x] Run `pnpm verify:agent`.
+- [x] Run `pnpm build`.
+- [x] Confirm `dist` remains a usable static site.
 
 ### Task 5: Document Deployment Impact
 
@@ -62,7 +62,13 @@
 - Modify: `readme-zh.md`
 - Modify: `AGENTS.md`
 
-- [ ] Document that ordinary static hosting still works.
-- [ ] Document that real x402 enforcement requires runtime adapter support.
-- [ ] Document Cloudflare runtime variables and Solana example values.
-- [ ] Document that wallet addresses must not be committed.
+- [x] Document that ordinary static hosting still works.
+- [x] Document that real x402 enforcement requires runtime adapter support.
+- [x] Document Cloudflare runtime variables and Solana example values.
+- [x] Document that wallet addresses must not be committed.
+
+### Production Verification
+
+- [x] Confirm `https://polyglow.realrip.com/api` returns `402 Payment Required`.
+- [x] Confirm `https://polyglow.realrip.com/api/v1` returns `402 Payment Required`.
+- [x] Confirm the response includes the `payment-required` header with the Solana network `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`.

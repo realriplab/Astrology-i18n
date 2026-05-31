@@ -152,7 +152,7 @@ PUBLIC_ADSENSE_CLIENT_ID=ca-pub-0000000000000000
 PUBLIC_X402_ENABLED=true
 PUBLIC_X402_PAY_TO=YourWalletAddress
 PUBLIC_X402_NETWORK=solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1
-PUBLIC_X402_PRICE=$0.01
+PUBLIC_X402_PRICE=$0.08
 PUBLIC_X402_DESCRIPTION=Voluntary x402 payment support for Polyglow content.
 PUBLIC_X402_FACILITATOR_URL=https://x402.org/facilitator
 PUBLIC_X402_CHARGE_MODE=all
@@ -183,13 +183,41 @@ X402_ENABLED=false
 X402_ENABLED=true
 X402_PAY_TO=YourWalletAddress
 X402_NETWORK=solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1
-X402_PRICE=$0.01
+X402_PRICE=$0.08
 X402_FACILITATOR_URL=https://x402.org/facilitator
 X402_BOT_ONLY=true
 X402_BOT_SCORE_THRESHOLD=30
 ```
 
+`X402_PAY_TO` 设为运行时 Secret，其他值设为运行时变量。`x402.org`
+facilitator 当前公布的 Solana 支持网络是
+`solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`。更换 facilitator 时，
+`X402_NETWORK` 必须使用该 facilitator 的 `/supported` 接口返回的网络值。
+
 Cloudflare 部署时，`/api`、`/api/v1` 和各语言文章页会进入适配器。启用网关后，API 探测路由始终要求支付；文章页在 `X402_BOT_ONLY=true` 时只对 bot 收费。不支持运行时适配器的平台仍可发布静态站和可选 x402 元数据，但不能执行支付拦截。
+
+生产部署验证命令：
+
+```bash
+curl -i https://your-domain.example/api
+curl -i https://your-domain.example/api/v1
+```
+
+网关启用后，两条请求都返回 `402 Payment Required`，并带有
+`payment-required` 响应头。Polyglow 生产环境已在
+`https://polyglow.realrip.com/api` 和
+`https://polyglow.realrip.com/api/v1` 验证通过。
+
+## Agent API 发现
+
+Polyglow 发布静态 API 发现文件，供代理自动读取：
+
+- `/.well-known/api-catalog` 发布 RFC 9727 API Catalog，包含 `/api` 和
+  `/api/v1` 的 linkset 条目。
+- `/openapi.json` 描述受 x402 保护的 API 探测端点。
+- `/auth.md` 说明代理访问方式和 x402 支付流程。
+
+项目默认不发布 OAuth/OIDC 元数据，因为仓库不包含 OAuth 授权服务器。只有部署环境具备真实的 issuer、token endpoint、JWKS endpoint、scope 和注册策略时，才添加 `/.well-known/openid-configuration`、`/.well-known/oauth-authorization-server` 或 `/.well-known/oauth-protected-resource`。
 
 ## 设计
 

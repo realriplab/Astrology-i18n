@@ -1,0 +1,121 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Polyglow x402 API",
+    "version": "1.0.0",
+    "description": "Static discovery description for Polyglow x402 protected API probes."
+  },
+  "servers": [
+    {
+      "url": "https://polyglow.realrip.com"
+    }
+  ],
+  "paths": {
+    "/api": {
+      "get": {
+        "summary": "x402 protected API probe",
+        "description": "Returns x402 payment requirements when no valid payment proof is supplied. After a valid payment, the runtime gateway can return protocol metadata.",
+        "operationId": "getX402ApiProbe",
+        "security": [
+          {
+            "x402": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment accepted or gateway metadata returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required. Read the payment-required response header for x402 requirements.",
+            "headers": {
+              "payment-required": {
+                "description": "x402 payment requirements encoded by the runtime gateway.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime gateway configuration or facilitator error."
+          }
+        }
+      }
+    },
+    "/api/v1": {
+      "get": {
+        "summary": "x402 protected API v1 probe",
+        "description": "Versioned alias for the x402 protected API probe.",
+        "operationId": "getX402ApiV1Probe",
+        "security": [
+          {
+            "x402": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment accepted or gateway metadata returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required. Read the payment-required response header for x402 requirements.",
+            "headers": {
+              "payment-required": {
+                "description": "x402 payment requirements encoded by the runtime gateway.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime gateway configuration or facilitator error."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "x402": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "payment-signature",
+        "description": "x402 payment proof supplied after reading the HTTP 402 payment-required challenge."
+      }
+    },
+    "schemas": {
+      "ApiResponse": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  }
+}

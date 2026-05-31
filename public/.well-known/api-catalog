@@ -1,0 +1,52 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://polyglow.realrip.com/api",
+      "service-desc": [
+        {
+          "href": "https://polyglow.realrip.com/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1",
+          "title": "Polyglow x402 API OpenAPI description"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://polyglow.realrip.com/auth.md",
+          "type": "text/markdown",
+          "title": "Polyglow agent authentication and payment instructions"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://polyglow.realrip.com/api",
+          "type": "application/json",
+          "title": "x402 protected API status probe"
+        }
+      ]
+    },
+    {
+      "anchor": "https://polyglow.realrip.com/api/v1",
+      "service-desc": [
+        {
+          "href": "https://polyglow.realrip.com/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1",
+          "title": "Polyglow x402 API OpenAPI description"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://polyglow.realrip.com/auth.md",
+          "type": "text/markdown",
+          "title": "Polyglow agent authentication and payment instructions"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://polyglow.realrip.com/api/v1",
+          "type": "application/json",
+          "title": "x402 protected API v1 status probe"
+        }
+      ]
+    }
+  ]
+}
