@@ -18,7 +18,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build && pnpm check:lcp-images",
+    "check:lcp-images": "node scripts/check-lcp-images.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "deploy": "pnpm build && wrangler deploy"
