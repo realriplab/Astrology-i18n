@@ -130,7 +130,7 @@ src/config/locales.ts    # 语言列表、默认语言、hreflang、文字方向
 src/config/taxonomy.ts   # 分类、标签、多语言名称、slug 工具
 src/config/pagination.ts # 分页数量
 src/config/assets.ts     # 远程图片域名检查和 URL 工具
-src/i18n/*.json          # 界面文案
+src/i18n/*.json          # 界面语言文案
 ```
 
 环境变量是可选的部署覆盖项，适合不同环境使用不同域名或第三方服务：
