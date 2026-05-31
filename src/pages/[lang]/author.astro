@@ -153,6 +153,7 @@ const currentActivity = activityByYear[String(activeYear)]
 const currentActivityWeeks = buildActivityWeeks(activeYear)
 const currentActivityMonths = buildActivityMonths(activeYear, currentActivityWeeks.length)
 const currentActivityGridWidth = activityGridWidth(currentActivityWeeks.length)
+const currentActivityRailWidth = `calc(${currentActivityGridWidth} + 0.5rem)`
 const activityDataJson = JSON.stringify(activityByYear).replace(/</g, "\\u003c")
 ---
 
@@ -220,60 +221,62 @@ const activityDataJson = JSON.stringify(activityByYear).replace(/</g, "\\u003c")
       data-activity-locale={lang}
       data-activity-published-text={publishedText}
     >
-      <div
-        class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"
-      >
-        <h2 class="text-2xl font-semibold text-foreground">
-          {writingActivityLabel}
-        </h2>
+      <div class="overflow-x-auto pb-2">
         <div
-          class="flex min-w-0 items-center gap-2 sm:max-w-[min(100%,28rem)]"
-          data-activity-year-nav
-          dir="ltr"
+          class="mx-auto flex min-w-[52rem] items-center justify-between gap-6"
+          style={`width: ${currentActivityRailWidth};`}
+          data-activity-year-rail
         >
-          <button
-            type="button"
-            class="hidden size-10 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground transition hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-35 dark:bg-white/[0.03]"
-            aria-label={previousYearsLabel}
-            data-activity-year-scroll="left"
-          >
-            <Icon name="chevron-left" class="size-4" />
-          </button>
+          <h2 class="text-2xl font-semibold text-foreground">
+            {writingActivityLabel}
+          </h2>
           <div
-            class="flex min-w-0 flex-1 snap-x gap-3 overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            data-activity-year-list
+            class="flex w-full min-w-0 items-center justify-end gap-2 sm:max-w-[20.5rem]"
+            data-activity-year-nav
+            dir="ltr"
           >
-            {
-              displayYears.map((year, index) => (
-                <button
-                  type="button"
-                  class={`inline-flex h-10 shrink-0 snap-start cursor-pointer items-center justify-center rounded-full px-6 text-sm font-semibold transition hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${
-                    index === 0
-                      ? "bg-foreground text-background"
-                      : "border border-border text-muted-foreground"
-                  }`}
-                  aria-pressed={index === 0 ? "true" : "false"}
-                  data-activity-year={year}
-                >
-                  {year}
-                </button>
-              ))
-            }
+            <button
+              type="button"
+              class="hidden size-10 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground transition hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-35 dark:bg-white/[0.03]"
+              aria-label={previousYearsLabel}
+              data-activity-year-scroll="left"
+            >
+              <Icon name="chevron-left" class="size-4" />
+            </button>
+            <div
+              class="flex min-w-0 max-w-[14.5rem] flex-1 snap-x gap-2 overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              data-activity-year-list
+            >
+              {
+                displayYears.map((year, index) => (
+                  <button
+                    type="button"
+                    class={`inline-flex h-10 w-[4.5rem] shrink-0 snap-start cursor-pointer items-center justify-center rounded-full text-sm font-semibold transition hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${
+                      index === 0
+                        ? "bg-foreground text-background"
+                        : "border border-border text-muted-foreground"
+                    }`}
+                    aria-pressed={index === 0 ? "true" : "false"}
+                    data-activity-year={year}
+                  >
+                    {year}
+                  </button>
+                ))
+              }
+            </div>
+            <button
+              type="button"
+              class="hidden size-10 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground transition hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-35 dark:bg-white/[0.03]"
+              aria-label={nextYearsLabel}
+              data-activity-year-scroll="right"
+            >
+              <Icon name="chevron-right" class="size-4" />
+            </button>
           </div>
-          <button
-            type="button"
-            class="hidden size-10 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground transition hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-35 dark:bg-white/[0.03]"
-            aria-label={nextYearsLabel}
-            data-activity-year-scroll="right"
-          >
-            <Icon name="chevron-right" class="size-4" />
-          </button>
         </div>
-      </div>
-      <div class="mt-7 overflow-x-auto pb-2">
         <div
-          class="min-w-[52rem]"
-          style={`width: ${currentActivityGridWidth};`}
+          class="mx-auto mt-5 min-w-[52rem] pl-2"
+          style={`width: ${currentActivityRailWidth};`}
           data-activity-grid
         >
           <div
@@ -309,8 +312,8 @@ const activityDataJson = JSON.stringify(activityByYear).replace(/</g, "\\u003c")
           </div>
         </div>
         <div
-          class="mt-3 flex min-w-[52rem] flex-wrap items-center justify-between gap-4 text-sm text-muted-foreground"
-          style={`width: ${currentActivityGridWidth};`}
+          class="mx-auto mt-3 flex min-w-[52rem] flex-wrap items-center justify-start gap-x-6 gap-y-2 text-sm text-muted-foreground"
+          style={`width: ${currentActivityRailWidth};`}
           data-activity-legend
         >
           <div class="flex items-center gap-2">
@@ -331,7 +334,11 @@ const activityDataJson = JSON.stringify(activityByYear).replace(/</g, "\\u003c")
         </div>
         {
           currentActivity.posts.length > 0 && (
-            <div class="mt-8 grid gap-3" data-author-published-list>
+            <div
+              class="mx-auto mt-8 grid min-w-[52rem] gap-3"
+              style={`width: ${currentActivityRailWidth};`}
+              data-author-published-list
+            >
               {currentActivity.posts.map((post) => (
                 <a
                   href={post.href}
@@ -383,6 +390,7 @@ const activityDataJson = JSON.stringify(activityByYear).replace(/</g, "\\u003c")
         }
         const heatmap = section.querySelector("[data-activity-heatmap]")
         const monthLabels = section.querySelector("[data-activity-months]")
+        const yearRail = section.querySelector("[data-activity-year-rail]")
         const activityGrid = section.querySelector("[data-activity-grid]")
         const activityLegend = section.querySelector("[data-activity-legend]")
         const summary = section.querySelector("[data-activity-summary]")
@@ -547,11 +555,15 @@ const activityDataJson = JSON.stringify(activityByYear).replace(/</g, "\\u003c")
             button.classList.toggle("border", !active)
             button.classList.toggle("border-border", !active)
             button.classList.toggle("text-muted-foreground", !active)
+            if (active) button.scrollIntoView({ block: "nearest", inline: "nearest" })
           })
           const weeks = buildWeeks(Number(year), activity.counts || {})
           const gridWidth = activityGridWidth(weeks.length)
-          if (activityGrid instanceof HTMLElement) activityGrid.style.width = gridWidth
-          if (activityLegend instanceof HTMLElement) activityLegend.style.width = gridWidth
+          const railWidth = `calc(${gridWidth} + 0.5rem)`
+          if (yearRail instanceof HTMLElement) yearRail.style.width = railWidth
+          if (activityGrid instanceof HTMLElement) activityGrid.style.width = railWidth
+          if (activityLegend instanceof HTMLElement) activityLegend.style.width = railWidth
+          if (publishedList instanceof HTMLElement) publishedList.style.width = railWidth
           renderMonthLabels(Number(year), weeks.length)
           renderHeatmap(weeks)
           renderPublishedList(activity.posts)
@@ -572,11 +584,15 @@ const activityDataJson = JSON.stringify(activityByYear).replace(/</g, "\\u003c")
           next.disabled = list.scrollLeft >= maxScroll - 1
         }
 
+        const getYearStep = () => {
+          const yearButton = yearButtons[0]
+          return yearButton ? yearButton.offsetWidth + 8 : list.clientWidth
+        }
         const handlePrevClick = () => {
-          list.scrollBy({ left: -list.clientWidth * 0.75, behavior: "smooth" })
+          list.scrollBy({ left: -getYearStep(), behavior: "smooth" })
         }
         const handleNextClick = () => {
-          list.scrollBy({ left: list.clientWidth * 0.75, behavior: "smooth" })
+          list.scrollBy({ left: getYearStep(), behavior: "smooth" })
         }
         const handlePointerDown = (event) => {
           if (!(event.target instanceof Element)) return

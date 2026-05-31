@@ -25,18 +25,14 @@ const legalLinks = [
     href: localePath(lang, "/terms-of-service/"),
     label: t(lang, "footer.termsOfService"),
   },
-  {
-    href: localePath(lang, "/contact/"),
-    label: t(lang, "footer.contactUs"),
-  },
 ]
 ---
 
 <footer class="w-full border-t border-border/60 bg-background" data-pagefind-ignore>
   <div
-    class="mx-auto grid max-w-6xl gap-12 px-4 py-14 text-sm text-muted-foreground sm:px-6 lg:grid-cols-[1.35fr_3fr] lg:gap-16 lg:py-16"
+    class="mx-auto grid max-w-6xl gap-8 px-4 py-12 text-sm text-muted-foreground sm:px-6 md:grid-cols-[1.35fr_3fr] md:gap-16 md:py-16"
   >
-    <div class="flex min-h-44 flex-col justify-between gap-10">
+    <div class="flex items-center justify-between gap-4 md:min-h-44 md:flex-col md:items-start md:gap-10">
       <a
         href={localePath(lang, "/")}
         class="flex w-fit items-center gap-2.5 text-xl font-semibold text-foreground"
@@ -52,7 +48,7 @@ const legalLinks = [
         />
         <span aria-hidden="true">{SITE_CONFIG.name}</span>
       </a>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center justify-end gap-3 md:justify-start">
         <a
           class="inline-flex size-9 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
           href={SITE_CONFIG.repository}
@@ -80,22 +76,22 @@ const legalLinks = [
         </a>
       </div>
     </div>
-    <div class="grid grid-cols-2 gap-x-10 gap-y-10 md:grid-cols-4">
+    <div class="mx-auto grid w-full max-w-sm grid-cols-2 gap-x-8 gap-y-9 md:mx-0 md:max-w-none md:grid-cols-4 md:gap-x-10 md:gap-y-10">
       {
         primaryCategories.map((category) => (
           <nav
-            class="grid content-start gap-4"
+            class="grid w-full content-start gap-4 text-left md:w-fit md:justify-self-start"
             aria-label={category.labelByLocale[lang]}
           >
             <a
-              class="w-fit text-base font-semibold text-foreground transition-colors hover:text-foreground/75"
+              class="text-base font-semibold text-foreground transition-colors hover:text-foreground/75"
               href={localePath(lang, `/category/${category.slug}/`)}
             >
               {category.labelByLocale[lang]}
             </a>
             {getTagsForCategory(category.slug).map((tag) => (
               <a
-                class="w-fit text-[0.9375rem] leading-6 transition-colors hover:text-foreground"
+                class="text-[0.9375rem] leading-6 transition-colors hover:text-foreground"
                 href={localePath(lang, `/tags/${tag.slug}/`)}
               >
                 {tag.labelByLocale[lang]}
@@ -104,24 +100,27 @@ const legalLinks = [
           </nav>
         ))
       }
-      <nav class="grid content-start gap-4" aria-label={t(lang, "footer.more")}>
+      <nav
+        class="grid w-full content-start gap-4 text-left md:w-fit md:justify-self-start"
+        aria-label={t(lang, "footer.more")}
+      >
         <p class="text-base font-semibold text-foreground">
           {t(lang, "footer.more")}
         </p>
         <a
-          class="w-fit text-[0.9375rem] leading-6 transition-colors hover:text-foreground"
+          class="text-[0.9375rem] leading-6 transition-colors hover:text-foreground"
           href={localePath(lang, "/category/")}
         >
           {t(lang, "footer.categories")}
         </a>
         <a
-          class="w-fit text-[0.9375rem] leading-6 transition-colors hover:text-foreground"
+          class="text-[0.9375rem] leading-6 transition-colors hover:text-foreground"
           href={localePath(lang, "/tags/")}
         >
           {t(lang, "footer.tags")}
         </a>
         <a
-          class="w-fit text-[0.9375rem] leading-6 transition-colors hover:text-foreground"
+          class="text-[0.9375rem] leading-6 transition-colors hover:text-foreground"
           href={localePath(lang, "/author/")}
         >
           {t(lang, "footer.author")}
@@ -129,10 +128,10 @@ const legalLinks = [
       </nav>
     </div>
     <div
-      class="col-span-2 flex flex-col gap-5 border-t border-border/60 pt-8 text-sm font-medium sm:flex-row sm:items-center sm:justify-between lg:col-span-2"
+      class="flex flex-col items-center gap-4 border-t border-border/60 pt-8 text-center text-xs font-medium md:col-span-2 md:flex-row md:justify-between md:text-left"
     >
       <nav
-        class="flex flex-wrap items-center gap-x-5 gap-y-3"
+        class="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 md:justify-start"
         aria-label={`${SITE_CONFIG.name} legal`}
       >
         {
@@ -143,8 +142,7 @@ const legalLinks = [
           ))
         }
       </nav>
-      <p class="text-sm text-muted-foreground">© {year} {SITE_CONFIG.name}</p>
-    </div>
+      <p class="text-xs text-muted-foreground">© {year} {SITE_CONFIG.name}</p>
     </div>
   </div>
 </footer>

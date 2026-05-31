@@ -6,6 +6,7 @@ import PostArchiveList from "@/components/lists/PostArchiveList.astro"
 import Pagination from "@/components/navigation/Pagination.astro"
 import { LOCALES, type Locale } from "@/config/locales"
 import { POSTS_PER_PAGE } from "@/config/pagination"
+import { getPaginationLinks } from "@/utils/pagination"
 import { getPostsForLocale } from "@/utils/posts"
 import { t } from "@/utils/translations"
 
@@ -34,6 +35,12 @@ const { lang, page } = Astro.props as {
   }
 }
 const title = t(lang, "pages.posts.pageTitle", { page: page.currentPage })
+const pagination = getPaginationLinks({
+  currentPage: page.currentPage,
+  totalPages: page.lastPage,
+  buildPageUrl: (pageNumber) =>
+    pageNumber === 1 ? `/${lang}/posts/` : `/${lang}/posts/${pageNumber}/`,
+})
 ---
 
 <Layout
@@ -64,6 +71,7 @@ const title = t(lang, "pages.posts.pageTitle", { page: page.currentPage })
       last={page.currentPage < page.lastPage
         ? `/${lang}/posts/${page.lastPage}/`
         : undefined}
+      pages={pagination.pages}
       currentPage={page.currentPage}
       totalPages={page.lastPage}
     />

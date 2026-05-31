@@ -1,37 +1,32 @@
 ---
+import type { PaginationPageItem } from "@/utils/pagination"
+
 interface Props {
   prev?: string
   next?: string
   first?: string
   last?: string
+  pages?: PaginationPageItem[]
   currentPage?: number
   totalPages?: number
 }
 
-const { prev, next, first, last, currentPage, totalPages } = Astro.props
+const { prev, next, pages = [], currentPage, totalPages } = Astro.props
 const itemClass =
   "inline-flex size-10 items-center justify-center rounded-lg border border-border bg-background/80 text-sm font-medium text-foreground shadow-sm backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-accent disabled:pointer-events-none disabled:opacity-40 dark:bg-white/5"
 const disabledClass = `${itemClass} opacity-35`
-const nextPage = currentPage ? currentPage + 1 : undefined
-const firstPage = first ?? prev
-const lastPage = last ?? next
+const pageItems =
+  pages.length > 0
+    ? pages
+    : currentPage
+      ? [{ type: "page" as const, page: currentPage, href: "#", current: true }]
+      : []
 ---
 
 <nav
   class="mt-10 flex items-center justify-center gap-3"
   aria-label="Pagination"
 >
-  {
-    firstPage ? (
-      <a class={itemClass} href={firstPage} aria-label="First page">
-        &laquo;
-      </a>
-    ) : (
-      <span class={disabledClass} aria-disabled="true" aria-label="First page">
-        &laquo;
-      </span>
-    )
-  }
   {
     prev ? (
       <a class={itemClass} href={prev} rel="prev" aria-label="Previous page">
@@ -48,47 +43,39 @@ const lastPage = last ?? next
     )
   }
   {
-    currentPage && (
-      <span
-        class="inline-flex size-10 items-center justify-center rounded-lg bg-foreground text-sm font-semibold text-background shadow-sm"
-        aria-current="page"
-        aria-label={totalPages
-          ? `Page ${currentPage} of ${totalPages}`
-          : `Page ${currentPage}`}
-      >
-        {currentPage}
-      </span>
+    pageItems.map((item) =>
+      item.type === "ellipsis" ? (
+        <span class="inline-flex size-10 items-center justify-center text-sm font-medium text-muted-foreground">
+          ...
+        </span>
+      ) : item.current ? (
+        <span
+          class="inline-flex size-10 items-center justify-center rounded-lg bg-foreground text-sm font-semibold text-background shadow-sm"
+          aria-current="page"
+          aria-label={totalPages
+            ? `Page ${item.page} of ${totalPages}`
+            : `Page ${item.page}`}
+        >
+          {item.page}
+        </span>
+      ) : (
+        <a class={itemClass} href={item.href} aria-label={`Page ${item.page}`}>
+          {item.page}
+        </a>
+      )
     )
   }
   {
     next ? (
-      <>
-        {nextPage && (
-          <a class={itemClass} href={next} aria-label={`Page ${nextPage}`}>
-            {nextPage}
-          </a>
-        )}
-        <a class={itemClass} href={next} rel="next" aria-label="Next page">
-          &rsaquo;
-        </a>
-      </>
+      <a class={itemClass} href={next} rel="next" aria-label="Next page">
+        &rsaquo;
+      </a>
     ) : (
       <>
         <span class={disabledClass} aria-disabled="true" aria-label="Next page">
           &rsaquo;
         </span>
       </>
-    )
-  }
-  {
-    lastPage ? (
-      <a class={itemClass} href={lastPage} aria-label="Last page">
-        &raquo;
-      </a>
-    ) : (
-      <span class={disabledClass} aria-disabled="true" aria-label="Last page">
-        &raquo;
-      </span>
     )
   }
 </nav>

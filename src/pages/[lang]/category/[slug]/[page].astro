@@ -8,6 +8,7 @@ import Pagination from "@/components/navigation/Pagination.astro"
 import { LOCALES, type Locale } from "@/config/locales"
 import { TAXONOMY_POSTS_PER_PAGE } from "@/config/pagination"
 import { TAXONOMY, getCategory, getTagsForCategory } from "@/config/taxonomy"
+import { getPaginationLinks } from "@/utils/pagination"
 import { getPostsByCategory } from "@/utils/posts"
 import { taxonomyMetaDescription, taxonomyMetaTitle } from "@/utils/seo"
 import { t } from "@/utils/translations"
@@ -55,6 +56,14 @@ const seoDescription =
   lang === "en"
     ? taxonomyMetaDescription(categoryLabel, categoryDescription, page.currentPage)
     : categoryDescription
+const pagination = getPaginationLinks({
+  currentPage: page.currentPage,
+  totalPages: page.lastPage,
+  buildPageUrl: (pageNumber) =>
+    pageNumber === 1
+      ? `/${lang}/category/${slug}/`
+      : `/${lang}/category/${slug}/${pageNumber}/`,
+})
 ---
 
 <Layout
@@ -90,6 +99,7 @@ const seoDescription =
       last={page.currentPage < page.lastPage
         ? `/${lang}/category/${slug}/${page.lastPage}/`
         : undefined}
+      pages={pagination.pages}
       currentPage={page.currentPage}
       totalPages={page.lastPage}
     />
