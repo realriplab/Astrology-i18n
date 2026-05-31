@@ -3,15 +3,20 @@ import sirv from "sirv"
 import { readFile, readdir, rm } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
 import path from "node:path"
+import type { AstroIntegration } from "astro"
 
 const SEARCHABLE_PAGE_PATTERN =
-  /^(zh|en|fr|es|ru|ja|ko|pt|de|id|ar)\/(?:about|posts\/(?!\d+\/)[^/]+)\/index\.html$/
+  /^(en|zh|fr|es|ru|ja|ko|pt|de|id|ar)\/(?:about|posts\/(?!\d+\/)[^/]+)\/index\.html$/
 
-const toPosixPath = (value) => value.split(path.sep).join("/")
+type PagefindOptions = {
+  indexConfig?: Parameters<typeof createIndex>[0]
+}
 
-const collectHtmlFiles = async (directory) => {
+const toPosixPath = (value: string) => value.split(path.sep).join("/")
+
+const collectHtmlFiles = async (directory: string): Promise<string[]> => {
   const entries = await readdir(directory, { withFileTypes: true })
-  const files = []
+  const files: string[] = []
 
   for (const entry of entries) {
     const fullPath = path.join(directory, entry.name)
@@ -26,8 +31,10 @@ const collectHtmlFiles = async (directory) => {
   return files
 }
 
-export default function pagefind({ indexConfig } = {}) {
-  let clientDir
+export default function pagefind({
+  indexConfig,
+}: PagefindOptions = {}): AstroIntegration {
+  let clientDir: string | undefined
 
   return {
     name: "polyglow-pagefind",
@@ -44,11 +51,10 @@ export default function pagefind({ indexConfig } = {}) {
       },
       "astro:server:setup": ({ server, logger }) => {
         const root =
-          server.config.root instanceof URL
-            ? fileURLToPath(server.config.root)
-            : server.config.root
-        const outDir =
-          clientDir ?? path.join(root, server.config.build.outDir)
+          typeof server.config.root === "string"
+            ? server.config.root
+            : fileURLToPath(server.config.root)
+        const outDir = clientDir ?? path.join(root, server.config.build.outDir)
         logger.debug(`Serving pagefind from ${outDir}`)
 
         const serve = sirv(outDir, {

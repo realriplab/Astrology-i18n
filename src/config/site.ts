@@ -32,6 +32,9 @@ const googleTagManagerId = normalizeGoogleTagManagerId(
 const googleAdsenseClientId = normalizeGoogleAdsenseClientId(
   import.meta.env.PUBLIC_ADSENSE_CLIENT_ID
 )
+const publicAssetBaseUrl = normalizePublicString(
+  import.meta.env.PUBLIC_ASSET_BASE_URL
+).replace(/\/$/, "")
 const x402PayTo = normalizePublicString(import.meta.env.PUBLIC_X402_PAY_TO)
 const x402Network = normalizePublicString(
   import.meta.env.PUBLIC_X402_NETWORK ??
@@ -63,13 +66,17 @@ export const SITE_CONFIG = {
   url: (
     import.meta.env.PUBLIC_SITE_URL ?? "https://example.com"
   ).replace(/\/$/, ""),
-  description: "在创业的波涛，投资的迷雾和生活的海洋中奋力前行",
+  description:
+    "Pressing forward through the waves of startup, the fog of investing, and the ocean of life.",
   repository: "https://github.com/realriplab/Polyglow",
   social: {
     x: socialXUrl,
     xHandle: socialXHandle,
   },
   defaultOgImage: "/open-graph.webp",
+  assets: {
+    publicBaseUrl: publicAssetBaseUrl,
+  },
   homepage: {
     layout: "cover" as HomepageLayout,
   },

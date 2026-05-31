@@ -1,7 +1,7 @@
 ---
 version: "alpha"
 name: "Polyglow"
-description: "A multilingual editorial Astro theme with neutral surfaces, image-led glass cards, compact archives, dark mode, Pagefind search, and long-form typography."
+description: "A multilingual editorial Astro theme with neutral surfaces, image-led glass cards, compact archives, dark mode, Astro view transitions, Pagefind search, and long-form typography."
 colors:
   background: "#FFFFFF"
   foreground: "#18181B"
@@ -175,7 +175,7 @@ the current theme intact.
 The current interface is neutral, content-first, image-led, and compact. It
 uses strong real imagery, glass panels over post covers and article heroes,
 quiet navigation, dense archive rows, readable prose, Pagefind search styling,
-and a light/dark theme switcher.
+Astro view transitions, and a light/dark theme switcher.
 
 ## Theme Model
 
@@ -184,9 +184,9 @@ map to semantic CSS variables, then `:root` and `.dark` provide the live light
 and dark values.
 
 `DESIGN.md` stores sRGB approximations of the current OKLCH runtime tokens.
-`pnpm design:theme` exports these values to `src/styles/design-theme.css` as a
-Tailwind-compatible token reference. The generated file does not replace the
-runtime dark-mode variables by itself.
+`src/styles/design-theme.css` is a Tailwind-compatible token reference generated
+from this file. The generated file does not replace the runtime dark-mode
+variables by itself.
 
 ## Color System
 

@@ -1,4 +1,4 @@
-/* Generated from DESIGN.md by `pnpm design:theme`. Do not edit manually. */
+/* Generated from DESIGN.md. Do not edit manually unless the token export workflow changes. */
 @theme {
   --color-background: #ffffff;
   --color-foreground: #18181b;

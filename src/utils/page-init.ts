@@ -10,7 +10,7 @@ function runCallback(callback: PageInitCallback): void {
 
 function runWhenReady(callback: PageInitCallback): void {
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => runCallback(callback), {
+    document.addEventListener("astro:page-load", () => runCallback(callback), {
       once: true,
     })
     return
@@ -25,4 +25,5 @@ export function registerPageInit(
 ): void {
   void key
   runWhenReady(callback)
+  document.addEventListener("astro:page-load", () => runCallback(callback))
 }

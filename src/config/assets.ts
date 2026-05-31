@@ -1,3 +1,5 @@
+import { SITE_CONFIG } from "@/config/site"
+
 export type ImageSourceKind = "asset" | "public" | "remote"
 
 function normalizeUrl(value: string | undefined): string {
@@ -14,7 +16,7 @@ function hostnameFromUrl(value: string): string | undefined {
   }
 }
 
-const publicAssetBaseUrl = normalizeUrl(import.meta.env.PUBLIC_ASSET_BASE_URL)
+const publicAssetBaseUrl = normalizeUrl(SITE_CONFIG.assets.publicBaseUrl)
 const configuredAssetHost = hostnameFromUrl(publicAssetBaseUrl)
 
 export const ASSET_CONFIG = {

@@ -1,6 +1,6 @@
 export const LOCALES = [
-  "zh",
   "en",
+  "zh",
   "fr",
   "es",
   "ru",
@@ -14,7 +14,7 @@ export const LOCALES = [
 
 export type Locale = (typeof LOCALES)[number]
 
-export const DEFAULT_LOCALE: Locale = "zh"
+export const DEFAULT_LOCALE: Locale = "en"
 
 export type LocaleMeta = {
   code: Locale

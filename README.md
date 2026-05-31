@@ -2,19 +2,19 @@
 
 [中文说明](readme-zh.md)
 
-Polyglow is a static Astro 6 blog for multilingual editorial publishing. The
-current codebase ships a Chinese-first site with locale-prefixed routes,
-content collections, category and tag archives, author pages, Pagefind search,
-RSS, sitemap output, SEO metadata, structured data, optimized images,
-light/dark themes, and optional static deployment to Cloudflare Workers.
+Polyglow is a static Astro 6 theme for multilingual editorial publishing. It
+ships locale-prefixed routes, content collections, category and tag archives,
+author pages, Pagefind search, RSS, sitemap output, SEO metadata through
+`astro-seo`, JSON-LD, Astro image optimization, light/dark themes, Astro view
+transitions, and optional Cloudflare Workers Static Assets deployment.
 
-The site does not require a database or private service for ordinary static
-hosting.
+The theme works without a database, private service, analytics account, ad
+account, wallet, or Cloudflare credentials.
 
 ## Requirements
 
-- Node.js 24 or newer
-- pnpm 11
+- Node.js 22 or newer
+- pnpm
 
 ## Start
 
@@ -23,42 +23,33 @@ pnpm install
 pnpm dev
 ```
 
-Astro prints the local URL. The default public entry redirects from `/` to the
-Chinese locale:
+Astro prints the local URL. The root entry redirects to the English locale:
 
 ```text
-http://localhost:4321/zh/
+http://localhost:4321/en/
 ```
 
 ## Commands
 
 ```bash
-pnpm dev           # Start local development
-pnpm typecheck     # Run astro check
-pnpm test          # Run Vitest utility tests
-pnpm build         # Typecheck, build static output, format sitemap XML
-pnpm preview       # Preview the built site locally
-pnpm images:check  # Check remote OptimizedPicture width/height usage
-pnpm seo:check     # Check generated HTML SEO output after pnpm build
-pnpm design:lint   # Validate DESIGN.md
-pnpm design:theme  # Generate src/styles/design-theme.css
-pnpm deploy        # Build, then deploy dist with Wrangler
+pnpm dev      # Start local development
+pnpm build    # Run astro check and build static output
+pnpm preview  # Preview the built site locally
+pnpm deploy   # Build, then deploy dist with Wrangler
 ```
 
 ## Project Structure
 
 ```text
-astro.config.mjs             # Astro, i18n, image, sitemap, integration config
-src/config/                  # Site, locale, taxonomy, pagination, assets
-src/content/                 # Authors, pages, posts
+astro.config.mjs             # Astro, i18n, image, sitemap, and integration config
+src/config/                  # Site, locale, taxonomy, pagination, and asset config
+src/content/                 # Authors, pages, and posts
 src/pages/                   # Localized routes and generated endpoints
-src/layouts/main.astro       # Shared shell, SEO, widgets, header/footer
-src/components/              # Cards, layout, nav, search, widgets, icons
-src/integrations/pagefind.mjs # Custom Pagefind build/dev integration
+src/layouts/main.astro       # Shared shell, SEO, widgets, header, and footer
+src/components/              # Cards, layout, navigation, search, widgets, and icons
+src/integrations/pagefind.ts # Pagefind build and dev integration
 src/styles/global.css        # Runtime Tailwind v4 theme and component CSS
-src/styles/design-theme.css  # Generated tokens from DESIGN.md
-scripts/                     # Build checks, sitemap, design export, deploy
-tests/                       # Vitest utility tests
+src/styles/design-theme.css  # Token reference generated from DESIGN.md
 ```
 
 ## Routes and Locales
@@ -66,26 +57,27 @@ tests/                       # Vitest utility tests
 Configured locales:
 
 ```text
-zh en fr es ru ja ko pt de id ar
+en zh fr es ru ja ko pt de id ar
 ```
 
-`zh` is the default locale. Public pages are locale-prefixed and keep trailing
+`en` is the default locale. Public pages are locale-prefixed and keep trailing
 slashes:
 
 ```text
-/zh/
-/zh/posts/
-/zh/posts/<slug>/
-/zh/category/
-/zh/category/<slug>/
-/zh/tags/
-/zh/tags/<slug>/
-/zh/author/
-/zh/search/
-/zh/rss.xml
+/en/
+/en/posts/
+/en/posts/<slug>/
+/en/category/
+/en/category/<slug>/
+/en/tags/
+/en/tags/<slug>/
+/en/author/
+/en/search/
+/en/rss.xml
 ```
 
-Arabic routes use RTL layout through locale metadata.
+Chinese content remains available under `/zh/`. Arabic routes use RTL layout
+through locale metadata.
 
 ## Write Content
 
@@ -101,24 +93,24 @@ src/content/
 Post example:
 
 ```text
-src/content/posts/zh/my-post.mdx
 src/content/posts/en/my-post.mdx
+src/content/posts/zh/my-post.mdx
 ```
 
 Post frontmatter:
 
 ```yaml
 ---
-title: "文章标题"
-description: "用于卡片和 SEO 的简短摘要。"
+title: "Post title"
+description: "Short summary for cards and SEO."
 category: "build"
 tags: ["strategy"]
 pubDate: 2026-05-12
 updatedDate: 2026-05-12
 authors: ["default"]
 heroImage: "/open-graph.webp"
-heroImageAlt: "图片替代文本"
-locale: "zh"
+heroImageAlt: "Image alt text"
+locale: "en"
 draft: false
 featured: false
 ---
@@ -134,133 +126,39 @@ heroBlurDataURL: "data:image/..."
 ```
 
 Remote `heroImage` values must include `heroImageWidth` and
-`heroImageHeight`. Remote image hosts are limited to `PUBLIC_ASSET_BASE_URL`,
-and Unsplash. Remote `OptimizedPicture` usage in content must include explicit
-`width` and `height`; verify with:
-
-```bash
-pnpm images:check
-```
+`heroImageHeight`. Remote image hosts are limited to Unsplash and the optional
+`PUBLIC_ASSET_BASE_URL` host.
 
 ## Configure
 
-Common files:
+Most users only need `src/config/site.ts`:
 
 ```text
-src/config/site.ts       # Site name, URL, repository, homepage, analytics, x402
+src/config/site.ts       # Site name, URL, description, repository, social links, homepage, assets, analytics, ads, x402
 src/config/locales.ts    # Locale list, default locale, hreflang, direction
 src/config/taxonomy.ts   # Categories, tags, localized labels, slug helpers
 src/config/pagination.ts # Page sizes
-src/config/assets.ts     # Remote image host allowlist and URL optimization
+src/config/assets.ts     # Remote image host checks and URL helpers
 src/i18n/*.json          # Interface text
-astro.config.mjs         # Astro integrations and build-level config
 ```
 
-Homepage layouts in `src/config/site.ts`:
-
-- `cover`: image-led homepage.
-- `archive`: compact archive-first homepage.
-- `text`: text-card homepage for low-image publishing.
-
-Environment variables are public because Astro embeds `PUBLIC_*` values in the
-client build:
+Environment variables are optional deployment overrides for values that often
+change by environment:
 
 ```bash
 PUBLIC_SITE_URL=https://example.com
 PUBLIC_ASSET_BASE_URL=https://assets.example.com
 ```
 
-When `PUBLIC_SITE_URL` is not set, the current code falls back to
-`https://example.com`.
-
-## Design
-
-`DESIGN.md` is the source for visual tokens and UI rules. The generated
-Tailwind v4 token file is `src/styles/design-theme.css`; the live runtime theme
-is still implemented in `src/styles/global.css`.
-
-```bash
-pnpm design:lint
-pnpm design:theme
-```
-
-Run these commands after changing design tokens, colors, typography, spacing,
-radii, card treatments, navigation, article prose, or search styling.
-
-## Search
-
-Pagefind is generated at build time by `src/integrations/pagefind.mjs`.
-
-The current index covers localized about pages and post detail pages. The search
-UI loads `/pagefind/pagefind-ui.js` lazily from
-`src/components/search/PagefindSearch.astro`.
-
-## SEO
-
-`src/layouts/main.astro` renders canonical URLs, hreflang alternates, Open
-Graph, Twitter metadata, JSON-LD, and content language metadata. `x-default`
-points to the Chinese locale.
-
-After route, metadata, sitemap, layout, or content schema changes:
-
-```bash
-pnpm build
-pnpm seo:check
-```
-
-## Deploy
-
-The build output is `dist`.
-
-```bash
-pnpm build
-```
-
-Polyglow can be published to any static host, including Cloudflare Pages,
-Vercel, Netlify, GitHub Pages, or a plain web server.
-
-The repository also includes an optional Cloudflare Workers Static Assets path:
-
-```bash
-pnpm deploy
-```
-
-`pnpm deploy` runs `pnpm build`, then `wrangler deploy` directly.
-
-After Worker config changes, validate packaging with:
-
-```bash
-pnpm build
-pnpm exec wrangler deploy --dry-run
-```
-
-## Google Tag Manager
-
-Google Tag Manager is optional and disabled by default. When enabled, the GTM
-script is loaded through Partytown.
+Optional integrations are disabled by default:
 
 ```bash
 PUBLIC_GTM_ENABLED=true
 PUBLIC_GTM_ID=GTM-XXXXXXX
-```
 
-## Google AdSense
-
-Google AdSense is optional and disabled by default. When enabled, the shared
-layout loads the official async AdSense script.
-
-```bash
 PUBLIC_ADSENSE_ENABLED=true
 PUBLIC_ADSENSE_CLIENT_ID=ca-pub-0000000000000000
-```
 
-## x402
-
-x402 metadata is optional and disabled by default. `X402.astro` is available as
-an opt-in widget and is not mounted in the shared layout by default. It
-publishes machine-readable metadata only; it does not enforce HTTP 402 payment.
-
-```bash
 PUBLIC_X402_ENABLED=true
 PUBLIC_X402_PAY_TO=YourWalletAddress
 PUBLIC_X402_NETWORK=solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp
@@ -271,13 +169,40 @@ PUBLIC_X402_CHARGE_MODE=all
 PUBLIC_X402_BOT_SCORE_THRESHOLD=30
 ```
 
-`PUBLIC_X402_CHARGE_MODE` accepts `all` or `bot-only`.
+`PUBLIC_X402_CHARGE_MODE` accepts `all` or `bot-only`. The x402 widget only
+publishes metadata; it does not enforce HTTP 402 payment.
+
+## Design
+
+`DESIGN.md` records the current visual tokens and UI rules. The live runtime
+theme is implemented in `src/styles/global.css`.
+
+## Search and SEO
+
+Pagefind is generated at build time by `src/integrations/pagefind.ts`. The
+current index covers localized about pages and post detail pages.
+
+`src/layouts/main.astro` uses `astro-seo` for standard SEO metadata and keeps
+project-owned JSON-LD generation in `src/utils/structured-data.ts`. `x-default`
+points to the English default locale.
+
+## Deploy
+
+The build output is `dist`.
+
+```bash
+pnpm build
+```
+
+Polyglow can be published to any static host, including Cloudflare Pages,
+Vercel, Netlify, GitHub Pages, or a plain web server. The repository also
+includes optional Workers Static Assets deployment:
+
+```bash
+pnpm deploy
+```
 
 ## Feedback
 
 Questions, ideas, and bug reports go to
 [GitHub Issues](https://github.com/realriplab/Polyglow/issues).
-
-## License
-
-MIT. See [LICENSE](LICENSE).

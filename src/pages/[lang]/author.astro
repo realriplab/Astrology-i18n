@@ -361,6 +361,9 @@ const activityDataJson = JSON.stringify(activityByYear).replace(/</g, "\\u003c")
 
 <script is:inline>
   ;(() => {
+    window.__polyglowAuthorActivityCleanup?.()
+    const cleanups = []
+
     const setupYearNav = () => {
       document.querySelectorAll("[data-activity-year-nav]").forEach((nav) => {
         if (!(nav instanceof HTMLElement)) return
@@ -569,13 +572,13 @@ const activityDataJson = JSON.stringify(activityByYear).replace(/</g, "\\u003c")
           next.disabled = list.scrollLeft >= maxScroll - 1
         }
 
-        prev.addEventListener("click", () => {
+        const handlePrevClick = () => {
           list.scrollBy({ left: -list.clientWidth * 0.75, behavior: "smooth" })
-        })
-        next.addEventListener("click", () => {
+        }
+        const handleNextClick = () => {
           list.scrollBy({ left: list.clientWidth * 0.75, behavior: "smooth" })
-        })
-        list.addEventListener("pointerdown", (event) => {
+        }
+        const handlePointerDown = (event) => {
           if (!(event.target instanceof Element)) return
           const button = event.target.closest("[data-activity-year]")
           if (!(button instanceof HTMLButtonElement)) return
@@ -583,13 +586,35 @@ const activityDataJson = JSON.stringify(activityByYear).replace(/</g, "\\u003c")
           if (!year) return
           event.preventDefault()
           setActiveYear(year)
-        })
+        }
+        prev.addEventListener("click", handlePrevClick)
+        next.addEventListener("click", handleNextClick)
+        list.addEventListener("pointerdown", handlePointerDown)
         list.addEventListener("scroll", update, { passive: true })
         window.addEventListener("resize", update)
+        cleanups.push(() => {
+          prev.removeEventListener("click", handlePrevClick)
+          next.removeEventListener("click", handleNextClick)
+          list.removeEventListener("pointerdown", handlePointerDown)
+          list.removeEventListener("scroll", update)
+          window.removeEventListener("resize", update)
+        })
         const initialYear = location.hash.match(/^#activity-(\d{4})$/)?.[1]
         if (initialYear) setActiveYear(initialYear)
         update()
       })
+    }
+    const cleanup = () => {
+      cleanups.splice(0).forEach((fn) => fn())
+    }
+    const handlePageLoad = () => setupYearNav()
+    const handleBeforeSwap = () => cleanup()
+    document.addEventListener("astro:page-load", handlePageLoad)
+    document.addEventListener("astro:before-swap", handleBeforeSwap)
+    window.__polyglowAuthorActivityCleanup = () => {
+      document.removeEventListener("astro:page-load", handlePageLoad)
+      document.removeEventListener("astro:before-swap", handleBeforeSwap)
+      cleanup()
     }
     setupYearNav()
   })()

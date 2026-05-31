@@ -5,7 +5,7 @@ import sitemap from "@astrojs/sitemap"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig, svgoOptimizer } from "astro/config"
 import icon from "astro-icon"
-import pagefind from "./src/integrations/pagefind.mjs"
+import pagefind from "./src/integrations/pagefind.ts"
 
 const assetHost = (() => {
   if (!process.env.PUBLIC_ASSET_BASE_URL) return undefined
@@ -21,8 +21,8 @@ const googleTagManagerEnabled =
   process.env.PUBLIC_GTM_ENABLED === "true" &&
   /^GTM-[A-Z0-9]+$/i.test(process.env.PUBLIC_GTM_ID ?? "")
 const sitemapLocaleMap = {
-  zh: "zh-CN",
   en: "en-US",
+  zh: "zh-CN",
   fr: "fr-FR",
   es: "es-ES",
   ru: "ru-RU",
@@ -49,8 +49,8 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   i18n: {
-    defaultLocale: "zh",
-    locales: ["zh", "en", "fr", "es", "ru", "ja", "ko", "pt", "de", "id", "ar"],
+    defaultLocale: "en",
+    locales: ["en", "zh", "fr", "es", "ru", "ja", "ko", "pt", "de", "id", "ar"],
     routing: {
       prefixDefaultLocale: true,
       redirectToDefaultLocale: false,
@@ -130,13 +130,13 @@ export default defineConfig({
         return pathname !== "/" && !pathname.endsWith("/search/")
       },
       i18n: {
-        defaultLocale: "zh",
+        defaultLocale: "en",
         locales: sitemapLocaleMap,
       },
       serialize: (item) => {
         if (!item.links?.length) return item
         const links = new Map(item.links.map((link) => [link.lang, link.url]))
-        const defaultUrl = links.get(sitemapLocaleMap.zh)
+        const defaultUrl = links.get(sitemapLocaleMap.en)
         if (defaultUrl) links.set("x-default", defaultUrl)
         return {
           ...item,

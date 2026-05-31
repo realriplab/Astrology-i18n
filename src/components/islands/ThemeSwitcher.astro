@@ -59,10 +59,10 @@ const { lang } = Astro.props
 
 <script is:inline>
   ;(() => {
-    if (window.__polyglowThemeSwitcher) return
-    window.__polyglowThemeSwitcher = true
+    window.__polyglowThemeSwitcherCleanup?.()
 
     const getThemePreference = () => localStorage.getItem("theme") || "system"
+    const darkModeQuery = matchMedia("(prefers-color-scheme: dark)")
 
     const updateThemeOptions = (theme) => {
       document.querySelectorAll("[data-theme-value]").forEach((option) => {
@@ -84,7 +84,7 @@ const { lang } = Astro.props
       }
       const resolved =
         theme === "system"
-          ? matchMedia("(prefers-color-scheme: dark)").matches
+          ? darkModeQuery.matches
             ? "dark"
             : "light"
           : theme
@@ -94,7 +94,7 @@ const { lang } = Astro.props
 
     applyTheme()
 
-    document.addEventListener("click", (event) => {
+    const handleClick = (event) => {
       const target = event.target
       if (!(target instanceof Element)) return
       const option = target.closest("[data-theme-value]")
@@ -108,13 +108,19 @@ const { lang } = Astro.props
         trigger.focus()
       }
       if (content instanceof HTMLElement) content.hidden = true
-    })
+    }
 
-    matchMedia("(prefers-color-scheme: dark)").addEventListener(
-      "change",
-      () => {
-        if (getThemePreference() === "system") applyTheme("system")
-      }
-    )
+    const handleSystemThemeChange = () => {
+      if (getThemePreference() === "system") applyTheme("system")
+    }
+    const handlePageLoad = () => applyTheme()
+    document.addEventListener("click", handleClick)
+    document.addEventListener("astro:page-load", handlePageLoad)
+    darkModeQuery.addEventListener("change", handleSystemThemeChange)
+    window.__polyglowThemeSwitcherCleanup = () => {
+      document.removeEventListener("click", handleClick)
+      document.removeEventListener("astro:page-load", handlePageLoad)
+      darkModeQuery.removeEventListener("change", handleSystemThemeChange)
+    }
   })()
 </script>

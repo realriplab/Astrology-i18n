@@ -33,6 +33,8 @@ const hint = getLocaleMeta(lang).searchHint
 <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
 <script is:inline define:vars={{ id, lang }}>
   ;(() => {
+    window.__polyglowPagefindSearchCleanup?.()
+
     const initPagefindSearch = async () => {
       const target = document.querySelector(`#${id}`)
       if (!target) return
@@ -62,7 +64,9 @@ const hint = getLocaleMeta(lang).searchHint
       try {
         await import("/pagefind/pagefind-ui.js")
         target.innerHTML = ""
-        const instance = new window.PagefindUI({
+        const PagefindUI = window.PagefindUI
+        if (!PagefindUI) throw new Error("Pagefind UI failed to load.")
+        const instance = new PagefindUI({
           element: `#${id}`,
           bundlePath: "/pagefind/",
           showImages: false,
@@ -87,12 +91,18 @@ const hint = getLocaleMeta(lang).searchHint
       }
     }
 
-    if (document.readyState === "loading") {
-      window.addEventListener("DOMContentLoaded", initPagefindSearch, {
-        once: true,
-      })
-    } else {
-      initPagefindSearch()
+    const cleanup = () => {
+      window.__polyglowPagefindSearch?.instance?.destroy?.()
+      window.__polyglowPagefindSearch = undefined
     }
+    const handleBeforeSwap = () => cleanup()
+    document.addEventListener("astro:page-load", initPagefindSearch)
+    document.addEventListener("astro:before-swap", handleBeforeSwap)
+    window.__polyglowPagefindSearchCleanup = () => {
+      document.removeEventListener("astro:page-load", initPagefindSearch)
+      document.removeEventListener("astro:before-swap", handleBeforeSwap)
+      cleanup()
+    }
+    initPagefindSearch()
   })()
 </script>

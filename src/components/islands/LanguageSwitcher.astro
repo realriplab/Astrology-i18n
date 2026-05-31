@@ -59,8 +59,7 @@ const flags: Record<Locale, string> = {
 
 <script is:inline>
   ;(() => {
-    if (window.__polyglowMenu) return
-    window.__polyglowMenu = true
+    window.__polyglowMenuCleanup?.()
 
     const closeMenu = (menu) => {
       const trigger = menu.querySelector("[data-polyglow-menu-trigger]")
@@ -93,7 +92,7 @@ const flags: Record<Locale, string> = {
       content.hidden = false
     }
 
-    document.addEventListener("click", (event) => {
+    const handleClick = (event) => {
       const target = event.target
       if (!(target instanceof Element)) return
 
@@ -109,9 +108,9 @@ const flags: Record<Locale, string> = {
       }
 
       if (!target.closest("[data-polyglow-menu]")) closeAll()
-    })
+    }
 
-    document.addEventListener("keydown", (event) => {
+    const handleKeydown = (event) => {
       if (event.key !== "Escape") return
       const openMenuContent = document.querySelector(
         "[data-polyglow-menu-content]:not([hidden])"
@@ -120,6 +119,16 @@ const flags: Record<Locale, string> = {
       if (!(menu instanceof HTMLElement)) return
       closeMenu(menu)
       menu.querySelector("button")?.focus()
-    })
+    }
+
+    const handleBeforeSwap = () => closeAll()
+    document.addEventListener("click", handleClick)
+    document.addEventListener("keydown", handleKeydown)
+    document.addEventListener("astro:before-swap", handleBeforeSwap)
+    window.__polyglowMenuCleanup = () => {
+      document.removeEventListener("click", handleClick)
+      document.removeEventListener("keydown", handleKeydown)
+      document.removeEventListener("astro:before-swap", handleBeforeSwap)
+    }
   })()
 </script>

@@ -1,6 +1,7 @@
 ---
 import "@/styles/global.css"
 import { SEO } from "astro-seo"
+import { ClientRouter } from "astro:transitions"
 import { LOCALES, getLocaleMeta, type Locale } from "@/config/locales"
 import { SITE_CONFIG } from "@/config/site"
 import { buildAlternates, canonicalUrl } from "@/utils/routes"
@@ -79,6 +80,7 @@ const alternateOgLocales = LOCALES.filter((locale) => locale !== lang).map(
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="content-language" content={localeMeta.hreflang} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ClientRouter />
     <SEO
       title={pageTitle}
       description={pageDescription}

@@ -99,8 +99,7 @@ const primaryCategories = getPrimaryCategories()
 
 <script is:inline>
   ;(() => {
-    if (window.__polyglowMobileNav) return
-    window.__polyglowMobileNav = true
+    window.__polyglowMobileNavCleanup?.()
 
     const getParts = (root) => ({
       trigger: root.querySelector("[data-mobile-nav-trigger]"),
@@ -142,7 +141,7 @@ const primaryCategories = getPrimaryCategories()
       if (restoreFocus) trigger.focus()
     }
 
-    document.addEventListener("click", (event) => {
+    const handleClick = (event) => {
       const target = event.target
       if (!(target instanceof Element)) return
 
@@ -160,15 +159,29 @@ const primaryCategories = getPrimaryCategories()
         const root = closeTarget.closest("[data-mobile-nav]")
         if (root instanceof HTMLElement) closeNav(root)
       }
-    })
+    }
 
-    document.addEventListener("keydown", (event) => {
+    const handleKeydown = (event) => {
       if (event.key !== "Escape") return
       const panel = document.querySelector(
         "[data-mobile-nav-panel]:not([hidden])"
       )
       const root = panel?.closest("[data-mobile-nav]")
       if (root instanceof HTMLElement) closeNav(root)
-    })
+    }
+
+    const handleBeforeSwap = () => {
+      document.querySelectorAll("[data-mobile-nav]").forEach((root) => {
+        if (root instanceof HTMLElement) closeNav(root, false)
+      })
+    }
+    document.addEventListener("click", handleClick)
+    document.addEventListener("keydown", handleKeydown)
+    document.addEventListener("astro:before-swap", handleBeforeSwap)
+    window.__polyglowMobileNavCleanup = () => {
+      document.removeEventListener("click", handleClick)
+      document.removeEventListener("keydown", handleKeydown)
+      document.removeEventListener("astro:before-swap", handleBeforeSwap)
+    }
   })()
 </script>
