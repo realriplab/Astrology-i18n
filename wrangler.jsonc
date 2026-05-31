@@ -27,7 +27,7 @@
   },
   "vars": {
     "X402_ENABLED": "false",
-    "X402_NETWORK": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+    "X402_NETWORK": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
     "X402_PRICE": "$0.01",
     "X402_FACILITATOR_URL": "https://x402.org/facilitator",
     "X402_BOT_ONLY": "true",

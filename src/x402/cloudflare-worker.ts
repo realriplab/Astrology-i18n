@@ -30,7 +30,7 @@ interface GatewayConfig {
   protectedPatterns: string[]
 }
 
-const DEFAULT_NETWORK = "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+const DEFAULT_NETWORK = "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
 const DEFAULT_PROTECTED_PATTERNS = [
   "/api",
   "/api/",
@@ -169,7 +169,7 @@ function createApp(config: GatewayConfig) {
 
   app.use(
     "*",
-    paymentMiddleware(paymentRoutes(config), resourceServer, undefined, undefined, false)
+    paymentMiddleware(paymentRoutes(config), resourceServer)
   )
   app.get("/api", (c) =>
     c.json({

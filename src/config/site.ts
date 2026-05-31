@@ -38,7 +38,7 @@ const publicAssetBaseUrl = normalizePublicString(
 const x402PayTo = normalizePublicString(import.meta.env.PUBLIC_X402_PAY_TO)
 const x402Network = normalizePublicString(
   import.meta.env.PUBLIC_X402_NETWORK ??
-    "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+    "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
 )
 const x402Price = normalizePublicString(
   import.meta.env.PUBLIC_X402_PRICE ?? "$0.01"

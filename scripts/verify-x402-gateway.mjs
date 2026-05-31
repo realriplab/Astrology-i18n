@@ -18,7 +18,7 @@ assert.equal(wrangler.assets.binding, "ASSETS")
 assert.ok(wrangler.assets.run_worker_first.includes("/api"))
 assert.ok(wrangler.assets.run_worker_first.includes("/en/posts/*"))
 assert.equal(wrangler.vars.X402_ENABLED, "false")
-assert.equal(wrangler.vars.X402_NETWORK, "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp")
+assert.equal(wrangler.vars.X402_NETWORK, "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1")
 
 const worker = read("src/x402/cloudflare-worker.ts")
 assert.match(worker, /paymentMiddleware/)
@@ -29,5 +29,10 @@ assert.match(worker, /botManagement/)
 assert.match(worker, /env\.ASSETS\.fetch/)
 assert.match(worker, /app\.get\("\/api"/)
 assert.match(worker, /app\.get\("\/api\/v1"/)
+assert.doesNotMatch(
+  worker,
+  /paymentMiddleware\([^)]*,\s*false\)/,
+  "x402 gateway must initialize facilitator support before building payment requirements"
+)
 
 console.log("x402 gateway source checks passed.")

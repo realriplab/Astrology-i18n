@@ -161,10 +161,10 @@ PUBLIC_ADSENSE_CLIENT_ID=ca-pub-0000000000000000
 
 PUBLIC_X402_ENABLED=true
 PUBLIC_X402_PAY_TO=YourWalletAddress
-PUBLIC_X402_NETWORK=solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp
+PUBLIC_X402_NETWORK=solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1
 PUBLIC_X402_PRICE=$0.01
 PUBLIC_X402_DESCRIPTION=Voluntary x402 payment support for Polyglow content.
-PUBLIC_X402_FACILITATOR_URL=https://your-solana-mainnet-facilitator.example
+PUBLIC_X402_FACILITATOR_URL=https://x402.org/facilitator
 PUBLIC_X402_CHARGE_MODE=all
 PUBLIC_X402_BOT_SCORE_THRESHOLD=30
 ```
@@ -191,7 +191,7 @@ Wrangler or the Cloudflare dashboard:
 ```bash
 X402_ENABLED=true
 X402_PAY_TO=YourWalletAddress
-X402_NETWORK=solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp
+X402_NETWORK=solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1
 X402_PRICE=$0.01
 X402_FACILITATOR_URL=https://x402.org/facilitator
 X402_BOT_ONLY=true
