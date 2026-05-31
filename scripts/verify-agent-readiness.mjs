@@ -106,6 +106,8 @@ assert.match(authMd, /Credential claim URI:/)
 assert.match(authMd, /Revocation URI:/)
 assert.match(authMd, /POST \/agent\/auth/)
 assert.match(authMd, /How agents register:/)
+assert.match(authMd, /\.well-known\/oauth-protected-resource/)
+assert.match(authMd, /\.well-known\/oauth-authorization-server/)
 
 const oauthMetadata = readJson("public/.well-known/oauth-authorization-server")
 assert.equal(oauthMetadata.issuer, "https://polyglow.realrip.com")

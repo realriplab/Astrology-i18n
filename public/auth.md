@@ -85,4 +85,9 @@ How agents register:
 
 Polyglow publishes static OAuth/OIDC discovery metadata so agents can distinguish OAuth discovery from x402 payment discovery. The current public deployment does not issue bearer tokens for content access.
 
+Well-known metadata links:
+
+- OAuth Protected Resource Metadata: `https://polyglow.realrip.com/.well-known/oauth-protected-resource`
+- OAuth Authorization Server Metadata: `https://polyglow.realrip.com/.well-known/oauth-authorization-server`
+
 Use the x402 payment challenge on the protected API endpoints for paid access.
