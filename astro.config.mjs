@@ -72,6 +72,11 @@ export default defineConfig({
     },
   },
   experimental: {
+    rustCompiler: true,
+    queuedRendering: {
+      enabled: true,
+      contentCache: true,
+    },
     svgOptimizer: svgoOptimizer({
       multipass: true,
       floatPrecision: 2,
